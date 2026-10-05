@@ -167,8 +167,15 @@ jobs:
           fi
 
       - name: Zielpfad prüfen
+        # Siehe Kommentar im Auslieferungs-Job: Leerraum aus dem Secret
+        # entfernen, bevor er in eine irreführende Fehlermeldung mündet.
         run: |
-          ZIEL="${{ secrets.DEPLOY_PATH }}"
+          ROH="${{ secrets.DEPLOY_PATH }}"
+          ZIEL="$(printf '%s' "$ROH" | tr -d '[:space:]')"
+          if [ "$ZIEL" != "$ROH" ]; then
+            echo "Hinweis: DEPLOY_PATH enthielt Leerraum, der entfernt wurde."
+            echo "Bitte das Secret bei Gelegenheit sauber neu setzen."
+          fi
           if [ -z "$ZIEL" ] || [ "$ZIEL" = "/" ]; then
             echo "FEHLER: DEPLOY_PATH ist leer oder unsicher gesetzt."
             exit 1
@@ -190,10 +197,12 @@ jobs:
 
       - name: rsync-Vorschau
         run: |
+          ZIEL="$(printf '%s' "${{ secrets.DEPLOY_PATH }}" | tr -d '[:space:]')"
+          test -n "$ZIEL" && test "$ZIEL" != "/"
           rsync -rlvzcn --human-readable \
             -e "ssh -p ${{ secrets.SSH_PORT }}" \
             --exclude=".DS_Store" \
-            public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}
+            public/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$ZIEL"
 
   ausliefern:
     name: Auf ALL-INKL ausliefern
@@ -224,14 +233,39 @@ jobs:
               "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" "echo Anmeldung erfolgreich; id -un"
 
       - name: Zielpfad prüfen
+        # Der Wert wird von Leerraum befreit, bevor irgendetwas damit
+        # geschieht: Ein beim Kopieren mitgenommener Tabulator oder ein
+        # Zeilenumbruch am Ende ist nicht zu sehen, und die Meldung
+        # "Verzeichnis existiert nicht" führt dann in die Irre – der
+        # Pfad stimmt ja, nur das unsichtbare Zeichen davor nicht.
+        # Bereinigt wird in jedem Schritt erneut statt einmal zentral:
+        # GitHub unterdrueckt Schritt-Ausgaben, die Secret-Inhalt tragen
+        # koennten. Der Wert kaeme leer an, und rsync schriebe dann ins
+        # Home-Verzeichnis statt ins Zielverzeichnis.
         run: |
-          ZIEL="${{ secrets.DEPLOY_PATH }}"
+          ROH="${{ secrets.DEPLOY_PATH }}"
+          ZIEL="$(printf '%s' "$ROH" | tr -d '[:space:]')"
+          if [ "$ZIEL" != "$ROH" ]; then
+            echo "Hinweis: DEPLOY_PATH enthielt Leerraum, der entfernt wurde."
+            echo "Bitte das Secret bei Gelegenheit sauber neu setzen."
+          fi
           if [ -z "$ZIEL" ] || [ "$ZIEL" = "/" ]; then
             echo "FEHLER: DEPLOY_PATH ist leer oder unsicher gesetzt. Breche ab."
             exit 1
           fi
-          ssh -p ${{ secrets.SSH_PORT }} \
-              "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" "test -d '$ZIEL'"
+          if ! ssh -p ${{ secrets.SSH_PORT }} \
+                   "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+                   "test -d '$ZIEL'"; then
+            echo "FEHLER: Auf dem Server gibt es kein Verzeichnis $ZIEL"
+            echo
+            echo "Vorhanden sind:"
+            ssh -p ${{ secrets.SSH_PORT }} \
+                "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+                "ls -d /www/htdocs/*/*/ 2>/dev/null | head -30" || true
+            echo
+            echo "Richtig ist das Verzeichnis, in dem index.html liegt."
+            exit 1
+          fi
           echo "Zielverzeichnis: $ZIEL — Inhalt vor dem Überschreiben:"
           ssh -p ${{ secrets.SSH_PORT }} \
               "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
@@ -242,10 +276,14 @@ jobs:
         # liegt und nicht aus dem Neubau stammt, bleibt unangetastet.
         # -c vergleicht Prüfsummen statt Zeitstempel.
         run: |
+          ZIEL="$(printf '%s' "${{ secrets.DEPLOY_PATH }}" | tr -d '[:space:]')"
+          # Ohne diese Zeile landete ein leerer Pfad im Home-Verzeichnis
+          # des SSH-Benutzers – also neben allen zwanzig Domains.
+          test -n "$ZIEL" && test "$ZIEL" != "/"
           rsync -rlvzc --human-readable \
             -e "ssh -p ${{ secrets.SSH_PORT }}" \
             --exclude=".DS_Store" \
-            public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}
+            public/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:$ZIEL"
 
       - name: Gegenprobe
         # Eine Seite je Sprache plus die beiden Rechtsseiten.
