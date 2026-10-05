@@ -32,6 +32,17 @@ Leser, egal wie gut er ist. */
 .artikel ul{margin-top:20px;padding-left:22px;list-style:disc;color:var(--muted);font-size:17px;line-height:1.75}
 .artikel li{margin-bottom:12px}
 .artikel a:not(.button):not(.text-link){color:var(--strong);text-decoration-thickness:1px}
+/* Hinweiskasten. Der Beitrag zu den Voraussetzungen benennt Fragen und
+die jeweils zustaendige Stelle - er legt keine Vorschriften aus. Das
+muss sichtbar am Anfang stehen, nicht im Kleingedruckten am Ende. */
+.artikel-hinweis{margin-top:28px;padding:24px 28px;background:var(--soft);border-radius:var(--r-img);max-width:68ch}
+.artikel-hinweis p{margin-top:0;font-size:15px;line-height:1.7}
+.artikel-hinweis p+p{margin-top:12px}
+
+/* Jeder Punkt der Checkliste nennt am Ende die zustaendige Stelle. */
+.wer{margin-top:14px!important;padding-left:16px;border-left:2px solid var(--accent);font-size:15px!important}
+.wer strong{color:var(--ink)}
+
 .artikel .faq{margin-top:72px;max-width:850px}
 .artikel .faq h2{margin-bottom:36px}
 
