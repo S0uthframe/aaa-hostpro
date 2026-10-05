@@ -1,0 +1,66 @@
+{
+  "lang": "el",
+  "locale": "el_GR",
+  "name": "Ελληνικά",
+  "flag": "gr",
+  "code": "ΕΛ",
+  "prefix": "el/",
+  "slugs": {
+    "index": "",
+    "arbitrage": "arbitrage/",
+    "co-hosting": "co-hosting/",
+    "about": "about/",
+    "kontakt": "contact/"
+  },
+  "chrome": {
+    "skip": "Μετάβαση στο περιεχόμενο",
+    "home": "Αρχική",
+    "nav_main": "Κύρια πλοήγηση",
+    "nav_mobile": "Πλοήγηση για κινητά",
+    "menu": "Μενού",
+    "menu_close": "Κλείσιμο",
+    "menu_close_aria": "Κλείσιμο μενού",
+    "contact": "Επικοινωνία",
+    "claim": "Προσωπικά. Οργανωμένα. Αξιόπιστα.",
+    "footer_claim": "Το ακίνητό σας.<br>Σε καλά χέρια.",
+    "discover": "ΑΝΑΚΑΛΥΨΤΕ",
+    "contact_label": "ΕΠΙΚΟΙΝΩΝΙΑ",
+    "stay_connected": "ΜΕΙΝΕΤΕ ΣΥΝΔΕΔΕΜΕΝΟΙ",
+    "book": "Κάντε κράτηση",
+    "website_by": "Ιστοσελίδα από",
+    "impressum": "Νομικές πληροφορίες (DE)",
+    "datenschutz": "Πολιτική απορρήτου (DE)",
+    "top": "Επάνω",
+    "lang_switch": "Επιλογή γλώσσας",
+    "lang_switch_to": "Προβολή στα ελληνικά",
+    "accommodations": "Καταλύματα"
+  },
+  "nav": {
+    "index": "Αρχική",
+    "arbitrage": "Arbitrage",
+    "co-hosting": "Co-hosting",
+    "about": "Σχετικά με εμάς"
+  },
+  "pages": {
+    "index": {
+      "title": "AAA HostPro — Διαχείριση βραχυχρόνιας μίσθωσης για ιδιοκτήτες",
+      "description": "Επαγγελματική διαχείριση για τη βραχυχρόνια μίσθωσή σας: arbitrage και co-hosting για ιδιοκτήτες, επενδυτές και εκμισθωτές. Με διαφάνεια και προσωπική φροντίδα."
+    },
+    "arbitrage": {
+      "title": "AAA HostPro — Arbitrage & rent-to-rent",
+      "description": "Μισθώνουμε το ακίνητό σας και το λειτουργούμε ως βραχυχρόνιο κατάλυμα. Γνωρίστε το μοντέλο rent-to-rent της AAA HostPro."
+    },
+    "co-hosting": {
+      "title": "AAA HostPro — Co-hosting για το εξοχικό σας",
+      "description": "Παραμένετε εκμισθωτής. Η AAA HostPro αναλαμβάνει την προβολή, την επικοινωνία με τους επισκέπτες και την καθημερινή λειτουργία του ακινήτου σας."
+    },
+    "about": {
+      "title": "AAA HostPro — Σχετικά με εμάς – προσωπικά στο πλευρό σας",
+      "description": "Γνωρίστε την Alex και τη Linda: τα πρόσωπα επικοινωνίας της AAA HostPro για επαγγελματική και προσωπική διαχείριση ακινήτων."
+    },
+    "kontakt": {
+      "title": "AAA HostPro — Επικοινωνία – ας μιλήσουμε για το ακίνητό σας",
+      "description": "Μιλήστε με την AAA HostPro για το ακίνητό σας. Επικοινωνήστε μαζί μας για co-hosting, rent-to-rent και δωρεάν ανάλυση δυναμικού."
+    }
+  }
+}

@@ -1,0 +1,31 @@
+
+
+/* Sprachumschalter. Flagge plus Kürzel: die Flagge als visueller
+Anker, das Kürzel als eindeutige Angabe – Flaggen bezeichnen Staaten,
+nicht Sprachen, und aus einem SVG liest ein Screenreader nichts vor.
+Die Farben folgen der Kopfzeile: über dem Foto hell und durchsichtig,
+auf beigem Grund dunkel. */
+.lang{display:flex;align-items:center;gap:2px;flex-shrink:0;margin-left:4px}
+.lang a{display:inline-flex;align-items:center;gap:7px;padding:7px 9px;border-radius:999px;text-decoration:none;color:inherit;font-size:10px;line-height:1;letter-spacing:.14em;font-weight:500;opacity:.6;transition:opacity .2s,background .2s}
+.lang a:hover{opacity:1;background:rgba(30,27,24,.07)}
+.lang a[aria-current]{opacity:1;background:rgba(30,27,24,.08)}
+.has-hero .lang a:hover{background:rgba(255,255,255,.18)}
+.has-hero .lang a[aria-current]{background:rgba(255,255,255,.2)}
+.lang svg{display:block;width:18px;height:12px;border-radius:2px;flex-shrink:0;box-shadow:0 0 0 1px rgba(30,27,24,.16)}
+.has-hero .lang svg{box-shadow:0 0 0 1px rgba(255,255,255,.34)}
+/* Im Mobilmenü ist Platz – dort als antippbare Felder mit 44 px Höhe,
+der Mindestgröße für eine Fingerfläche. */
+/* Der Umschalter ist im Dialog selbst ein <nav>. Die Regel "dialog nav"
+gibt dort Spaltenrichtung, 70px Aussenabstand und die Serifenschrift der
+grossen Menuepunkte vor – alles drei gilt hier nicht und muss ausdruecklich
+zurueckgenommen werden, sonst stehen die Flaggen gestapelt ueber die volle
+Breite. */
+.lang-mobile{display:flex;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:8px;margin:0 0 38px}
+.lang-mobile a{display:inline-flex;flex:0 0 auto;align-items:center;gap:9px;min-height:44px;padding:0 13px;border:1px solid var(--line);border-radius:999px;text-decoration:none;color:inherit;font-family:Sans,SansFB,Arial,sans-serif;font-size:12px;line-height:1;letter-spacing:.1em;font-weight:500}
+.lang-mobile a[aria-current]{border-color:var(--ink);background:var(--soft)}
+.lang-mobile svg{display:block;width:21px;height:14px;border-radius:2px;flex-shrink:0;box-shadow:0 0 0 1px rgba(30,27,24,.16)}
+/* Unter 1100 px wird die Kopfzeile eng: Abstände zusammenziehen. */
+@media(max-width:1100px){.lang{gap:0;margin-left:0}.lang a{padding:7px;gap:5px;font-size:9px}.lang svg{width:16px;height:11px}}
+/* Unter 900 px verschwindet die Hauptnavigation ins Mobilmenü – der
+Umschalter geht mit, sonst steht er allein neben dem Menüknopf. */
+@media(max-width:900px){.lang{display:none}}

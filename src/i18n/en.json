@@ -1,0 +1,66 @@
+{
+  "lang": "en",
+  "locale": "en_GB",
+  "name": "English",
+  "flag": "gb",
+  "code": "EN",
+  "prefix": "en/",
+  "slugs": {
+    "index": "",
+    "arbitrage": "arbitrage/",
+    "co-hosting": "co-hosting/",
+    "about": "about/",
+    "kontakt": "contact/"
+  },
+  "chrome": {
+    "skip": "Skip to content",
+    "home": "Home",
+    "nav_main": "Main navigation",
+    "nav_mobile": "Mobile navigation",
+    "menu": "Menu",
+    "menu_close": "Close",
+    "menu_close_aria": "Close menu",
+    "contact": "Contact",
+    "claim": "Personal. Structured. Dependable.",
+    "footer_claim": "Your property.<br>In good hands.",
+    "discover": "DISCOVER",
+    "contact_label": "CONTACT",
+    "stay_connected": "STAY CONNECTED",
+    "book": "Book a stay",
+    "website_by": "Website by",
+    "impressum": "Legal notice (DE)",
+    "datenschutz": "Privacy policy (DE)",
+    "top": "Back to top",
+    "lang_switch": "Choose language",
+    "lang_switch_to": "View in English",
+    "accommodations": "Accommodation"
+  },
+  "nav": {
+    "index": "Home",
+    "arbitrage": "Arbitrage",
+    "co-hosting": "Co-hosting",
+    "about": "About us"
+  },
+  "pages": {
+    "index": {
+      "title": "AAA HostPro — Short-term rental management for property owners",
+      "description": "Professional management for your short-term rental: arbitrage and co-hosting for owners, investors and landlords. Transparent and personal."
+    },
+    "arbitrage": {
+      "title": "AAA HostPro — Arbitrage & rent-to-rent",
+      "description": "We rent your property and run it as a short-term let. Discover the rent-to-rent model from AAA HostPro."
+    },
+    "co-hosting": {
+      "title": "AAA HostPro — Co-hosting for your holiday property",
+      "description": "You remain the landlord. AAA HostPro takes on the marketing, the guest communication and the day-to-day running of your holiday property."
+    },
+    "about": {
+      "title": "AAA HostPro — About us – personally at your side",
+      "description": "Meet Alex and Linda: your contacts at AAA HostPro for property management that is both professional and personal."
+    },
+    "kontakt": {
+      "title": "AAA HostPro — Contact – let's talk about your property",
+      "description": "Tell AAA HostPro about your property. Get in touch about co-hosting, rent-to-rent and a free potential analysis."
+    }
+  }
+}

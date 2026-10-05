@@ -1,0 +1,11 @@
+# Bauergebnis – entsteht aus src/ und assets/
+public/
+
+# macOS
+.DS_Store
+._*
+__MACOSX/
+
+# Python
+__pycache__/
+*.pyc

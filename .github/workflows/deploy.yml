@@ -1,0 +1,266 @@
+name: Deploy AAA HostPro
+
+# Aufbau wie bei royal-motorcars: getrennte Jobs für Vorschau und
+# echtes Ausliefern, Schlüssel über den ssh-agent, Sicherheitscheck auf
+# den Zielpfad, danach eine Gegenprobe per HTTP.
+#
+# Beide Projekte liegen im selben ALL-INKL-Paket (w01839ab) und
+# benutzen denselben SSH-Benutzer. Es unterscheidet sich allein der
+# DEPLOY_PATH: /www/htdocs/w01839ab/aaa-hostpro.de/
+
+on:
+  workflow_dispatch:
+    inputs:
+      aktion:
+        description: 'Was soll passieren?'
+        required: true
+        type: choice
+        options:
+          - "dry-run (nur Vorschau, überträgt nichts)"
+          - "deploy (echter Upload)"
+      bestaetigung:
+        description: 'Nur bei "deploy": schreibe exakt "deploy" zur Bestätigung'
+        required: false
+        type: string
+  # Bewusst kein push-Auslöser: Die Seite ist live, ein versehentlicher
+  # Commit soll sie nicht überschreiben.
+
+jobs:
+  bauen:
+    name: Seiten bauen und prüfen
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Seiten bauen
+        run: python3 build.py
+
+      - name: Ergebnis prüfen
+        # Lieber hier abbrechen als eine halbe Seite ausliefern.
+        run: |
+          anzahl=$(find public -name index.html | wc -l)
+          echo "Gebaute Seiten: $anzahl"
+          test "$anzahl" -eq 22
+          # Keine übrig gebliebenen Platzhalter
+          ! grep -rl '{{' public --include='*.html'
+          test -f public/sitemap.xml
+          test -f public/robots.txt
+          test -d public/assets/fonts
+          # Jede Sprache muss ihre Startseite haben
+          for s in en ru el; do test -f "public/$s/index.html"; done
+          # Rechtsseiten gibt es nur auf Deutsch
+          test -f public/impressum/index.html
+          test -f public/datenschutz/index.html
+
+      - name: Tote Verweise suchen
+        # Die Seiten liegen in drei Verschachtelungstiefen (/, /en/,
+        # /en/contact/). Ein falsch berechneter relativer Pfad fällt
+        # im Browser erst auf, wenn ein Bild fehlt – hier fällt er auf,
+        # bevor irgendetwas übertragen wird.
+        run: |
+          python3 - <<'PY'
+          import re, pathlib, sys, urllib.parse as up
+          P = pathlib.Path('public'); fehler = []; n = 0
+          for f in P.rglob('index.html'):
+              h = f.read_text('utf-8'); refs = set()
+              for m in re.finditer(r'(?:href|src)="([^"]+)"', h):
+                  refs.add(m.group(1))
+              for attr in ('srcset', 'imagesrcset'):
+                  for m in re.finditer(attr + r'="([^"]+)"', h):
+                      for t in m.group(1).split(','):
+                          refs.add(t.strip().split(' ')[0])
+              for r in refs:
+                  if r.startswith(('http://', 'https://', 'mailto:', 'tel:', '#', 'data:')):
+                      continue
+                  n += 1
+                  p = (P / r.lstrip('/')) if r.startswith('/') else (f.parent / r)
+                  p = pathlib.Path(up.urlparse(str(p)).path)
+                  if p.is_dir():
+                      p = p / 'index.html'
+                  if not p.exists():
+                      fehler.append(f'{f.parent.relative_to(P)} -> {r}')
+          print(f'{n} lokale Verweise geprüft')
+          if fehler:
+              print(f'{len(fehler)} tote Verweise:')
+              for x in fehler[:30]:
+                  print('  ' + x)
+              sys.exit(1)
+          print('keine toten Verweise')
+          PY
+
+      - name: Was passiert jetzt?
+        # Ein Lauf, der nichts ausliefert, soll nicht stillschweigend
+        # als Erfolg durchgehen.
+        run: |
+          AKTION="${{ github.event.inputs.aktion }}"
+          WORT="${{ github.event.inputs.bestaetigung }}"
+          echo "Gewählt: $AKTION"
+          echo "Bestätigungswort: ${WORT:-(leer)}"
+          echo
+          case "$AKTION" in
+            dry-run*)
+              echo "-> Es folgt die VORSCHAU. Es wird nichts übertragen." ;;
+            deploy*)
+              case "$WORT" in
+                deploy|DEPLOY|Deploy|live|LIVE|Live)
+                  echo "-> Es folgt die ECHTE ÜBERTRAGUNG auf aaa-hostpro.de." ;;
+                *)
+                  echo "-> ACHTUNG: Es passiert NICHTS."
+                  echo "   Bei \"deploy\" muss im zweiten Feld das Wort deploy stehen."
+                  echo "   Eingegeben wurde: ${WORT:-(nichts)}"
+                  exit 1 ;;
+              esac ;;
+            *)
+              echo "-> Unbekannte Auswahl, es passiert nichts."; exit 1 ;;
+          esac
+
+      - name: Ergebnis weiterreichen
+        uses: actions/upload-artifact@v4
+        with:
+          name: website
+          path: public
+          retention-days: 3
+
+  vorschau:
+    name: "Vorschau (überträgt nichts)"
+    needs: bauen
+    if: startsWith(github.event.inputs.aktion, 'dry-run')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: website
+          path: public
+
+      - name: SSH-Key einrichten
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Known Hosts eintragen
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Anmeldung prüfen
+        run: |
+          echo "Im Agenten geladene Schlüssel:"
+          ssh-add -l || echo "  (keiner – dann hat das Secret SSH_PRIVATE_KEY nicht geladen)"
+          echo
+          if ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=10 \
+                 "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" "echo Anmeldung erfolgreich; id -un"; then
+            echo "Verbindung steht."
+          else
+            echo
+            echo "Die Anmeldung wurde abgelehnt. Zwei Ursachen sind möglich:"
+            echo
+            echo "1) SSH_USER stimmt nicht. Bei ALL-INKL lautet der SSH-Benutzer"
+            echo "   ssh-<Kennung>, hier also ssh-w01839ab – nicht die Kennung allein."
+            echo
+            echo "2) Im Secret SSH_PRIVATE_KEY steckt ein anderer Schlüssel als der,"
+            echo "   der auf dem Server in ~/.ssh/authorized_keys liegt."
+            exit 1
+          fi
+
+      - name: Zielpfad prüfen
+        run: |
+          ZIEL="${{ secrets.DEPLOY_PATH }}"
+          if [ -z "$ZIEL" ] || [ "$ZIEL" = "/" ]; then
+            echo "FEHLER: DEPLOY_PATH ist leer oder unsicher gesetzt."
+            exit 1
+          fi
+          if ! ssh -p ${{ secrets.SSH_PORT }} \
+                   "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+                   "test -d '$ZIEL'"; then
+            echo "FEHLER: Auf dem Server gibt es kein Verzeichnis $ZIEL"
+            echo "Vorhanden sind:"
+            ssh -p ${{ secrets.SSH_PORT }} \
+                "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+                "ls -d /www/htdocs/*/*/ 2>/dev/null | head -30" || true
+            exit 1
+          fi
+          echo "Zielverzeichnis gefunden: $ZIEL — Inhalt:"
+          ssh -p ${{ secrets.SSH_PORT }} \
+              "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+              "ls '$ZIEL' | head -14"
+
+      - name: rsync-Vorschau
+        run: |
+          rsync -rlvzcn --human-readable \
+            -e "ssh -p ${{ secrets.SSH_PORT }}" \
+            --exclude=".DS_Store" \
+            public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}
+
+  ausliefern:
+    name: Auf ALL-INKL ausliefern
+    needs: bauen
+    if: startsWith(github.event.inputs.aktion, 'deploy') && contains(fromJSON('["deploy","DEPLOY","Deploy","live","LIVE","Live"]'), github.event.inputs.bestaetigung)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: website
+          path: public
+
+      - name: SSH-Key einrichten
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Known Hosts eintragen
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Anmeldung prüfen
+        run: |
+          echo "Im Agenten geladene Schlüssel:"
+          ssh-add -l || echo "  (keiner – dann hat das Secret SSH_PRIVATE_KEY nicht geladen)"
+          ssh -p ${{ secrets.SSH_PORT }} -o BatchMode=yes -o ConnectTimeout=10 \
+              "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" "echo Anmeldung erfolgreich; id -un"
+
+      - name: Zielpfad prüfen
+        run: |
+          ZIEL="${{ secrets.DEPLOY_PATH }}"
+          if [ -z "$ZIEL" ] || [ "$ZIEL" = "/" ]; then
+            echo "FEHLER: DEPLOY_PATH ist leer oder unsicher gesetzt. Breche ab."
+            exit 1
+          fi
+          ssh -p ${{ secrets.SSH_PORT }} \
+              "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" "test -d '$ZIEL'"
+          echo "Zielverzeichnis: $ZIEL — Inhalt vor dem Überschreiben:"
+          ssh -p ${{ secrets.SSH_PORT }} \
+              "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+              "ls '$ZIEL' | head -14"
+
+      - name: Übertragen
+        # Kein --delete: index.htm und alles andere, was auf dem Server
+        # liegt und nicht aus dem Neubau stammt, bleibt unangetastet.
+        # -c vergleicht Prüfsummen statt Zeitstempel.
+        run: |
+          rsync -rlvzc --human-readable \
+            -e "ssh -p ${{ secrets.SSH_PORT }}" \
+            --exclude=".DS_Store" \
+            public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}
+
+      - name: Gegenprobe
+        # Eine Seite je Sprache plus die beiden Rechtsseiten.
+        run: |
+          for u in / /arbitrage/ /kontakt/ /impressum/ /datenschutz/ \
+                   /en/ /en/contact/ /ru/ /ru/about/ /el/ /el/co-hosting/; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" "https://aaa-hostpro.de$u")
+            echo "$code  $u"
+            test "$code" = "200"
+          done
+          echo
+          echo "Sprachauszeichnung der Startseiten:"
+          for s in "":de "en/":en "ru/":ru "el/":el; do
+            pfad="${s%%:*}"; soll="${s##*:}"
+            ist=$(curl -s "https://aaa-hostpro.de/$pfad" | grep -o '<html lang="[a-z]*"' | head -1)
+            echo "  /$pfad -> $ist (erwartet lang=\"$soll\")"
+            echo "$ist" | grep -q "\"$soll\""
+          done

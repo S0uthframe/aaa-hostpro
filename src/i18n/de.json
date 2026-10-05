@@ -1,0 +1,76 @@
+{
+  "lang": "de",
+  "locale": "de_DE",
+  "name": "Deutsch",
+  "flag": "de",
+  "code": "DE",
+  "prefix": "",
+  "slugs": {
+    "index": "",
+    "arbitrage": "arbitrage/",
+    "co-hosting": "co-hosting/",
+    "about": "about/",
+    "kontakt": "kontakt/",
+    "impressum": "impressum/",
+    "datenschutz": "datenschutz/"
+  },
+  "chrome": {
+    "skip": "Zum Inhalt springen",
+    "home": "Startseite",
+    "nav_main": "Hauptnavigation",
+    "nav_mobile": "Mobile Navigation",
+    "menu": "Menü",
+    "menu_close": "Schließen",
+    "menu_close_aria": "Menü schließen",
+    "contact": "Kontakt",
+    "claim": "Persönlich. Strukturiert. Verlässlich.",
+    "footer_claim": "Ihre Immobilie.<br>In guten Händen.",
+    "discover": "ENTDECKEN",
+    "contact_label": "KONTAKT",
+    "stay_connected": "VERBUNDEN BLEIBEN",
+    "book": "Unterkunft buchen",
+    "website_by": "Website von",
+    "impressum": "Impressum",
+    "datenschutz": "Datenschutz",
+    "top": "Nach oben",
+    "lang_switch": "Sprache wählen",
+    "lang_switch_to": "Auf Deutsch ansehen",
+    "accommodations": "Unterkünfte"
+  },
+  "nav": {
+    "index": "Startseite",
+    "arbitrage": "Arbitrage",
+    "co-hosting": "Co-Hosting",
+    "about": "Über uns"
+  },
+  "pages": {
+    "index": {
+      "title": "AAA HostPro — Kurzzeitvermietungs-Management für Eigentümer",
+      "description": "Professionelles Management für Ihre Kurzzeitvermietung: Arbitrage und Co-Hosting für Eigentümer, Investoren und Vermieter. Transparent und persönlich."
+    },
+    "arbitrage": {
+      "title": "AAA HostPro — Arbitrage & Rent-to-Rent",
+      "description": "Wir mieten Ihre Immobilie an und übernehmen den Betrieb als Kurzzeitunterkunft. Lernen Sie das Rent-to-Rent-Modell von AAA HostPro kennen."
+    },
+    "co-hosting": {
+      "title": "AAA HostPro — Co-Hosting für Ihre Ferienimmobilie",
+      "description": "Sie bleiben Vermieter. AAA HostPro unterstützt Sie bei Vermarktung, Gästekommunikation und dem operativen Betrieb Ihrer Ferienimmobilie."
+    },
+    "about": {
+      "title": "AAA HostPro — Über uns – persönlich an Ihrer Seite",
+      "description": "Lernen Sie Alex und Linda kennen: Ihre Ansprechpartnerinnen bei AAA HostPro für professionelle und persönliche Immobilienbetreuung."
+    },
+    "kontakt": {
+      "title": "AAA HostPro — Kontakt – sprechen wir über Ihre Immobilie",
+      "description": "Sprechen Sie mit AAA HostPro über Ihre Immobilie. Kontakt für Co-Hosting, Rent-to-Rent und eine kostenlose Potenzial-Analyse."
+    },
+    "impressum": {
+      "title": "AAA HostPro — Impressum",
+      "description": "Impressum"
+    },
+    "datenschutz": {
+      "title": "AAA HostPro — Datenschutz",
+      "description": "Datenschutz"
+    }
+  }
+}
