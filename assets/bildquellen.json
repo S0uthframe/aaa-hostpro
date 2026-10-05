@@ -1,0 +1,30 @@
+{
+  "living": {
+    "url": "/assets/img/living-1800.jpg",
+    "alt": "Wohnbereich mit Sofa und gedecktem Esstisch"
+  },
+  "bed": {
+    "url": "/assets/img/bed-1800.jpg",
+    "alt": "Helles Schlafzimmer mit großzügigem Doppelbett"
+  },
+  "table": {
+    "url": "/assets/img/table-1800.jpg",
+    "alt": "Liebevoll gedeckter Tisch in einer betreuten Unterkunft"
+  },
+  "kitchen": {
+    "url": "/assets/img/kitchen-1800.jpg",
+    "alt": "Voll ausgestattete Küche der Ferienwohnung"
+  },
+  "detail": {
+    "url": "/assets/img/detail-1800.jpg",
+    "alt": "Sorgfältig arrangierte Details auf dem Esstisch"
+  },
+  "alex": {
+    "url": "/assets/portrait-alex-900.jpg",
+    "alt": "Alex, Gründerin von AAA HostPro"
+  },
+  "linda": {
+    "url": "/assets/portrait-linda-900.jpg",
+    "alt": "Linda, Operations und Business Managerin"
+  }
+}
