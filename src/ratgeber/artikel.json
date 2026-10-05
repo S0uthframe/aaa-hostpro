@@ -1,0 +1,40 @@
+{
+  "_hinweis": [
+    "Verzeichnis der Ratgeber-Beiträge. Jeder Eintrag verweist auf eine",
+    "Datei src/ratgeber/<slug>.html mit dem Rumpf des Beitrags.",
+    "",
+    "entwurf = true: wird lokal gebaut, aber nicht ausgeliefert. Der",
+    "Beitrag taucht dann weder in der Übersicht noch in der Sitemap auf",
+    "und trägt noindex. So lässt sich ein Beitrag fertig bauen und",
+    "ansehen, bevor er öffentlich wird.",
+    "",
+    "Die Beiträge gibt es bewusst nur auf Deutsch: Die Keyword-Daten, auf",
+    "denen die Themenwahl beruht, stammen aus dem deutschen Markt."
+  ],
+  "artikel": [
+    {
+      "slug": "ferienwohnung-vermieten-was-beachten",
+      "titel": "Ferienwohnung vermieten: Was Sie vorher klären müssen",
+      "beschreibung": "Zweckentfremdung, Teilungserklärung, Versicherung, Steuern, Meldepflichten: die Checkliste, bevor die erste Buchung hereinkommt.",
+      "teaser": "Die meisten Probleme entstehen nicht im Betrieb, sondern davor – weil eine Frage nicht gestellt wurde, die sich später teuer beantwortet.",
+      "datum": "2026-10-12",
+      "entwurf": true
+    },
+    {
+      "slug": "co-hosting-airbnb-ferienwohnung",
+      "titel": "Co-Hosting bei Airbnb & Co.: Was ein Co-Host übernimmt",
+      "beschreibung": "Sie bleiben Vermieter, jemand anderes übernimmt den Betrieb. Was dazugehört, was es kostet und wann es sich nicht lohnt.",
+      "teaser": "Kurzzeitvermietung ist kein passives Einkommen, sondern ein kleiner Betrieb. Co-Hosting ist die Antwort auf genau diesen Punkt.",
+      "datum": "2026-10-15",
+      "entwurf": true
+    },
+    {
+      "slug": "ferienwohnung-selbst-vermieten-oder-verwalten-lassen",
+      "titel": "Ferienwohnung selbst vermieten oder verwalten lassen?",
+      "beschreibung": "Wie viel Arbeit Kurzzeitvermietung wirklich macht, was eine Verwaltung abnimmt und ab wann sich die Abgabe rechnet.",
+      "teaser": "Die Frage wird meistens zu spät gestellt – wenn die Vermietung schon läuft und die Begeisterung in Routine umgeschlagen ist.",
+      "datum": "2026-10-15",
+      "entwurf": true
+    }
+  ]
+}

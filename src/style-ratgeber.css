@@ -1,0 +1,65 @@
+
+/* ---- Ratgeber ---------------------------------------------------------
+Beitragsseiten haben bewusst keinen Foto-Hero. Ein Ratgeber wird gelesen,
+nicht bestaunt: Der Text soll ueber der Falz beginnen, nicht erst nach
+einem bildschirmfuellenden Bild. Das spart ausserdem den groessten
+Ladeposten der Seite.
+
+Ohne Hero liegt der Inhalt unter der festen Kopfzeile - daher das obere
+Polster, analog zu .legal bei Impressum und Datenschutz. */
+.brotkrume{width:min(1200px,calc(100% - 112px));margin:0 auto;padding-top:138px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
+.brotkrume a{text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px}
+.brotkrume a:hover{color:var(--ink);border-color:var(--strong)}
+.brotkrume span[aria-current]{color:var(--ink)}
+.brotkrume span[aria-hidden]{opacity:.45}
+
+.artikel-kopf{padding-top:34px;padding-bottom:0;max-width:none}
+.artikel-kopf h1{max-width:900px}
+.artikel-intro{margin-top:28px;font-size:21px;line-height:1.55;max-width:60ch}
+.artikel-datum{margin-top:26px;font-size:13px;color:var(--muted)}
+
+/* Lesespalte. 68 Zeichen ist der Bereich, in dem das Auge die naechste
+Zeile noch zuverlaessig findet - breiter gesetzter Fliesstext kostet
+Leser, egal wie gut er ist. */
+.artikel{max-width:none}
+.artikel>*{max-width:68ch}
+.artikel h2{font-size:34px;margin:64px 0 20px}
+.artikel h2:first-child{margin-top:0}
+.artikel h3{font-family:Sans,SansFB,Arial,sans-serif;font-size:20px;line-height:1.4;letter-spacing:0;margin:40px 0 12px}
+.artikel p{font-size:17px;line-height:1.75;color:var(--muted);margin-top:18px}
+.artikel p:first-child{margin-top:0}
+.artikel p strong,.artikel li strong{color:var(--ink);font-weight:600}
+.artikel ul{margin-top:20px;padding-left:22px;list-style:disc;color:var(--muted);font-size:17px;line-height:1.75}
+.artikel li{margin-bottom:12px}
+.artikel a:not(.button):not(.text-link){color:var(--strong);text-decoration-thickness:1px}
+.artikel .faq{margin-top:72px;max-width:850px}
+.artikel .faq h2{margin-bottom:36px}
+
+/* Einschub mitten im Beitrag: ein Angebot an der Stelle, an der die
+Frage gerade aufkommt - nicht fuenf Aufforderungen ueber die Seite
+verteilt. */
+.artikel-cta{max-width:720px}
+.artikel-cta h2{font-size:38px;margin:16px 0 18px}
+.artikel-cta p{color:var(--muted);font-size:16px;margin-bottom:28px}
+
+/* Uebersicht */
+.artikel-liste{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:48px}
+.artikel-karte{display:flex;flex-direction:column;gap:14px;padding:36px 34px;background:var(--base);border:1px solid var(--line);border-radius:var(--r);text-decoration:none;color:inherit;transition:border-color .3s,transform .4s cubic-bezier(.22,.61,.36,1)}
+.artikel-karte:hover{border-color:var(--accent);transform:translateY(-4px)}
+.artikel-karte h3{font-family:Instrument,InstrumentFB,Georgia,serif;font-size:27px;line-height:1.18;letter-spacing:-.01em;font-weight:400}
+.artikel-karte p{color:var(--muted);font-size:15px;line-height:1.65;flex:1}
+.artikel-karte .text-link{margin-top:6px;border-bottom:0;padding:0;font-size:13px;color:var(--strong)}
+.artikel-leer{color:var(--muted);margin-top:40px}
+
+@media(max-width:1100px){.brotkrume{width:calc(100% - 80px)}}
+@media(max-width:900px){
+  .brotkrume{width:calc(100% - 48px);padding-top:116px;font-size:11px}
+  .artikel-liste{grid-template-columns:1fr;gap:20px}
+  .artikel h2{font-size:30px;margin:52px 0 16px}
+  .artikel-intro{font-size:19px}
+}
+@media(max-width:640px){
+  .artikel p,.artikel ul{font-size:16px}
+  .artikel-karte{padding:28px 26px}
+  .artikel-karte h3{font-size:24px}
+}

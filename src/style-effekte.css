@@ -1,0 +1,52 @@
+
+/* ---- Bewegung ---------------------------------------------------------
+Drei Effekte, mehr nicht. Bei einer Marke, die von Zurückhaltung lebt,
+wirkt jede zusätzliche Bewegung billiger statt hochwertiger.
+
+Zwei Grenzen, die eingehalten werden:
+
+1. Der Hero wird NICHT animiert. Die große Überschrift ist auf den
+   meisten Seiten das LCP-Element – ein Einblenden darauf verschiebt den
+   gemessenen Bildaufbau nach hinten und verschlechtert die Core Web
+   Vitals messbar.
+2. Animiert werden ausschließlich opacity und transform. Beide laufen
+   im Compositor und lösen kein Layout aus, also kein Layout Shift.
+
+Alles hängt an der Klasse .bewegung, die das Skript setzt. Ohne
+JavaScript ist jeder Abschnitt von Anfang an sichtbar – der Inhalt darf
+nie von einem Skript abhängen. */
+.bewegung main>section:not(.hero){opacity:0;transform:translateY(16px);transition:opacity .75s cubic-bezier(.22,.61,.36,1),transform .75s cubic-bezier(.22,.61,.36,1)}
+.bewegung main>section.sichtbar{opacity:1;transform:none}
+
+/* Rasterfelder kommen gestaffelt nach. Nur transform, keine zweite
+Deckungs-Animation – übereinandergelegte Blenden sehen matschig aus. */
+.bewegung .points article,.bewegung .services article,.bewegung .team-pictures figure,.bewegung .process li{transform:translateY(18px);transition:transform .85s cubic-bezier(.22,.61,.36,1)}
+.bewegung .sichtbar .points article,.bewegung .sichtbar .services article,.bewegung .sichtbar .team-pictures figure,.bewegung .sichtbar .process li{transform:none}
+.bewegung .sichtbar :is(.points,.services,.team-pictures,.process ol)>:nth-child(2){transition-delay:.09s}
+.bewegung .sichtbar :is(.points,.services,.team-pictures,.process ol)>:nth-child(3){transition-delay:.18s}
+.bewegung .sichtbar :is(.points,.services,.team-pictures,.process ol)>:nth-child(4){transition-delay:.27s}
+.bewegung .sichtbar :is(.points,.services,.team-pictures,.process ol)>:nth-child(5){transition-delay:.36s}
+.bewegung .sichtbar :is(.points,.services,.team-pictures,.process ol)>:nth-child(6){transition-delay:.45s}
+
+/* Karten heben sich beim Überfahren leicht an. Bewusst kein Zoom auf
+dem Bild: Die Bilder liegen ohne beschneidenden Behälter im Raster, ein
+vergrößertes Bild würde über seine Zelle hinauslaufen. */
+.services article,.team-pictures figure{transition:transform .5s cubic-bezier(.22,.61,.36,1)}
+@media(hover:hover){
+  .services article:hover,.team-pictures figure:hover{transform:translateY(-5px)}
+  .bewegung .sichtbar .services article:hover,.bewegung .sichtbar .team-pictures figure:hover{transform:translateY(-5px)}
+}
+
+/* Knöpfe geben beim Drücken nach. Ein Detail, das man nicht sieht,
+sondern spürt. */
+.button{transition:background .2s,transform .12s}
+.button:active{transform:translateY(1px)}
+
+/* Wer Bewegung abbestellt hat, bekommt keine. Die Abschnitte sind dann
+unmittelbar sichtbar – das Skript setzt .bewegung in diesem Fall gar
+nicht erst, diese Regel ist die zweite Sicherung. */
+@media(prefers-reduced-motion:reduce){
+  .bewegung main>section:not(.hero),
+  .bewegung .points article,.bewegung .services article,
+  .bewegung .team-pictures figure,.bewegung .process li{opacity:1;transform:none;transition:none}
+}

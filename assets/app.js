@@ -84,3 +84,44 @@ if(form){
   }
  });
 }
+
+/* Sprachmenü: <details> kann aufklappen, aber nicht von selbst wieder zu.
+   Escape und Klick daneben ergänzt das Skript. */
+const sprachmenue = document.querySelector('details.lang');
+if (sprachmenue) {
+ document.addEventListener('click', e => {
+  if (sprachmenue.open && !sprachmenue.contains(e.target)) sprachmenue.open = false;
+ });
+ document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && sprachmenue.open) {
+   sprachmenue.open = false;
+   sprachmenue.querySelector('summary').focus();
+  }
+ });
+}
+
+/* Abschnitte blenden beim Scrollen sanft ein.
+   Die Klasse .bewegung setzt erst das Skript – ohne JavaScript ist alles
+   von Anfang an sichtbar. Inhalt darf nie von einem Skript abhängen.
+   Der Hero bleibt ausgenommen: Seine Überschrift ist meist das
+   LCP-Element, ein Einblenden darauf verschlechtert die Messung. */
+const ruhe = window.matchMedia('(prefers-reduced-motion: reduce)');
+if (!ruhe.matches && 'IntersectionObserver' in window) {
+ document.documentElement.classList.add('bewegung');
+ const beobachter = new IntersectionObserver((eintraege, o) => {
+  for (const e of eintraege) {
+   if (!e.isIntersecting) continue;
+   e.target.classList.add('sichtbar');
+   o.unobserve(e.target);
+  }
+ }, { rootMargin: '0px 0px -8% 0px', threshold: 0.04 });
+ const abschnitte = document.querySelectorAll('main > section:not(.hero)');
+ abschnitte.forEach(a => beobachter.observe(a));
+ /* Was beim Laden schon im Bild steht, soll nicht erst einblenden,
+    wenn der Besucher scrollt. */
+ requestAnimationFrame(() => {
+  abschnitte.forEach(a => {
+   if (a.getBoundingClientRect().top < window.innerHeight) a.classList.add('sichtbar');
+  });
+ });
+}
