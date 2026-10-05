@@ -74,3 +74,14 @@ verteilt. */
   .artikel-karte{padding:28px 26px}
   .artikel-karte h3{font-size:24px}
 }
+
+/* Aufmacherbild unter dem Beitragskopf. Bricht den Textanfang auf und
+gibt der Übersicht etwas zum Anfassen. Die Motive stammen aus dem
+vorhandenen Bestand - eigene Bilder je Beitrag gibt es noch nicht. */
+.artikel-aufmacher{padding-top:40px}
+.artikel-aufmacher img{width:100%;aspect-ratio:21/9;object-fit:cover;border-radius:var(--r)}
+.artikel-karte{padding:0;overflow:hidden;gap:0}
+.artikel-karte-bild{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:0;transition:transform 1s cubic-bezier(.22,.61,.36,1)}
+.artikel-karte:hover .artikel-karte-bild{transform:scale(1.04)}
+.artikel-karte-text{display:flex;flex-direction:column;gap:14px;flex:1;padding:30px 32px 34px}
+@media(max-width:900px){.artikel-aufmacher img{aspect-ratio:16/9}.artikel-karte-text{padding:26px 26px 30px}}

@@ -3,10 +3,15 @@
     "Verzeichnis der Ratgeber-Beiträge. Jeder Eintrag verweist auf eine",
     "Datei src/ratgeber/<slug>.html mit dem Rumpf des Beitrags.",
     "",
+    "bild: Motiv aus assets/img/ ohne Breitenangabe. Die verfügbaren",
+    "Motive und ihre Abmessungen stehen in build.py unter BILDER.",
+    "bild_alt: Beschreibung für Screenreader und für den Fall, dass das",
+    "Bild nicht lädt. Kein 'Bild von ...', sondern was zu sehen ist.",
+    "",
     "entwurf = true: wird lokal gebaut, aber nicht ausgeliefert. Der",
     "Beitrag taucht dann weder in der Übersicht noch in der Sitemap auf",
-    "und trägt noindex. So lässt sich ein Beitrag fertig bauen und",
-    "ansehen, bevor er öffentlich wird.",
+    "und trägt noindex. Gibt es keinen veröffentlichten Beitrag,",
+    "entfallen auch Übersichtsseite und Link in der Fußzeile.",
     "",
     "Die Beiträge gibt es bewusst nur auf Deutsch: Die Keyword-Daten, auf",
     "denen die Themenwahl beruht, stammen aus dem deutschen Markt."
@@ -17,23 +22,27 @@
       "titel": "Ferienwohnung vermieten: Was Sie vorher klären müssen",
       "beschreibung": "Zweckentfremdung, Teilungserklärung, Versicherung, Steuern, Meldepflichten: die Checkliste, bevor die erste Buchung hereinkommt.",
       "teaser": "Die meisten Probleme entstehen nicht im Betrieb, sondern davor – weil eine Frage nicht gestellt wurde, die sich später teuer beantwortet.",
-      "datum": "2026-10-05"
+      "datum": "2026-10-05",
+      "bild": "kitchen",
+      "bild_alt": "Voll ausgestattete Küche einer Ferienwohnung"
     },
     {
       "slug": "co-hosting-airbnb-ferienwohnung",
       "titel": "Co-Hosting bei Airbnb & Co.: Was ein Co-Host übernimmt",
       "beschreibung": "Sie bleiben Vermieter, jemand anderes übernimmt den Betrieb. Was dazugehört, was es kostet und wann es sich nicht lohnt.",
       "teaser": "Was ein Co-Host konkret übernimmt, woran sich ein seriöses Angebot erkennen lässt – und wann sich das Modell für Ihr Objekt nicht lohnt.",
-      "datum": "2026-10-15",
-      "entwurf": true
+      "datum": "2026-10-05",
+      "bild": "living",
+      "bild_alt": "Wohnbereich einer betreuten Ferienwohnung mit Sofa und Esstisch"
     },
     {
       "slug": "ferienwohnung-selbst-vermieten-oder-verwalten-lassen",
       "titel": "Ferienwohnung selbst vermieten oder verwalten lassen?",
       "beschreibung": "Wie viel Arbeit Kurzzeitvermietung wirklich macht, was eine Verwaltung abnimmt und ab wann sich die Abgabe rechnet.",
       "teaser": "Die Frage wird meistens zu spät gestellt – wenn die Vermietung schon läuft und die Begeisterung in Routine umgeschlagen ist.",
-      "datum": "2026-10-15",
-      "entwurf": true
+      "datum": "2026-10-05",
+      "bild": "bed",
+      "bild_alt": "Frisch bezogenes Doppelbett in einer Ferienwohnung"
     }
   ]
 }

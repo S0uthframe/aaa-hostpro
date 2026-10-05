@@ -347,6 +347,33 @@ def jsonld_block(*teile) -> str:
     return f'<script type="application/ld+json">{text}</script>'
 
 
+# Die vorhandenen Motive mit ihren Abmessungen. width/height im Markup
+# verhindern, dass die Seite beim Nachladen des Bildes springt.
+BILDER = {
+    "chalet":  (1672, 941,  [600, 750, 900, 1200, 1672]),
+    "bed":     (1800, 1200, [600, 750, 900, 1200, 1800]),
+    "table":   (1800, 1200, [600, 750, 900, 1200, 1800]),
+    "living":  (1800, 1200, [600, 750, 900, 1200, 1800]),
+    "detail":  (1800, 1200, [600, 750, 900, 1200, 1800]),
+    "kitchen": (1800, 1200, [600, 750, 900, 1200, 1800]),
+}
+
+
+def bild_tag(name: str, alt: str, root: str, sizes: str, klasse: str = "",
+             lazy: bool = True) -> str:
+    if name not in BILDER:
+        raise SystemExit(f"Unbekanntes Motiv: {name}")
+    w, h, breiten = BILDER[name]
+    webp = ", ".join(f"{root}assets/img/{name}-{b}.webp {b}w" for b in breiten)
+    jpg = ", ".join(f"{root}assets/img/{name}-{b}.jpg {b}w" for b in breiten)
+    laden = 'loading="lazy"' if lazy else 'fetchpriority="high"'
+    k = f' class="{klasse}"' if klasse else ""
+    return (f'<picture><source type="image/webp" srcset="{webp}" sizes="{sizes}">'
+            f'<img{k} src="{root}assets/img/{name}-{breiten[-1]}.jpg" srcset="{jpg}" '
+            f'sizes="{sizes}" alt="{alt}" width="{w}" height="{h}" {laden} '
+            f'decoding="async"></picture>')
+
+
 def artikelkarten(artikel: list, root: str) -> str:
     if not artikel:
         return ('<p class="artikel-leer">Die ersten Beitr\u00e4ge erscheinen in '
@@ -354,12 +381,18 @@ def artikelkarten(artikel: list, root: str) -> str:
     karten = []
     for a in sorted(artikel, key=lambda x: x["datum"], reverse=True):
         ziel = f'{root}{RATGEBER_BASIS}{a["slug"]}/'
+        bild = bild_tag(a["bild"], a["bild_alt"], root,
+                        "(min-width:900px) 586px, 100vw",
+                        klasse="artikel-karte-bild")
         karten.append(
             f'<a class="artikel-karte" href="{ziel}">'
+            f'{bild}'
+            f'<div class="artikel-karte-text">'
             f'<h3>{a["titel"]}</h3>'
             f'<p>{a["teaser"]}</p>'
-            f'<span class="text-link">Weiterlesen <span aria-hidden="true">\u2197</span></span>'
-            f'</a>'
+            f'<span class="text-link">Weiterlesen '
+            f'<span aria-hidden="true">\u2197</span></span>'
+            f'</div></a>'
         )
     return f'<div class="artikel-liste">{"".join(karten)}</div>'
 
@@ -528,7 +561,7 @@ def bauen():
     css_ratgeber = css_basis + css_zusatz.get("ratgeber", "") + css_global
 
     def ratgeber_seite(pfad, titel, beschreibung, rumpf, schema_extra, entwurf,
-                       teaser="", datum=""):
+                       teaser="", datum="", bild="", bild_alt=""):
         root = tiefe(pfad)
         inhalt = rumpf.replace("{{root}}", root)
         inhalt = re.sub(
@@ -553,6 +586,12 @@ def bauen():
                 f'<time datetime="{datum}">'
                 f'{sprache["chrome"]["aktualisiert"]} {datum_text}</time></p>'
                 '</section>'
+                '<section class="wrap artikel-aufmacher">'
+                # Nicht lazy: Das Bild steht oben und waere sonst erst
+                # sichtbar, wenn der Besucher schon daran vorbei ist.
+                + bild_tag(bild, bild_alt, root, "(min-width:1200px) 1200px, 100vw",
+                           lazy=False)
+                + '</section>'
             ) + inhalt
 
         inhalt = brotkrume(sprache, root, titel if pfad != RATGEBER_BASIS else None) + inhalt
@@ -569,7 +608,7 @@ def bauen():
             "description": beschreibung,
             "canonical": f"{DOMAIN}/{pfad}",
             "hreflang": "",          # gibt es nur auf Deutsch
-            "og_image": "living-1200.jpg",
+            "og_image": f"{bild or 'living'}-1200.jpg",
             "hero_preload": "",
             "italic_preload": ITALIC,
             "css": css_ratgeber,
@@ -625,6 +664,7 @@ def bauen():
             "dateModified": a["datum"],
             "inLanguage": "de-DE",
             "mainEntityOfPage": {"@type": "WebPage", "@id": f"{DOMAIN}/{pfad}"},
+            "image": f'{DOMAIN}/assets/img/{a["bild"]}-1200.jpg',
             "author": {"@type": "Organization", "name": "AAA HostPro",
                        "url": f"{DOMAIN}/"},
             "publisher": {"@type": "Organization", "name": "AAA HostPro",
@@ -636,6 +676,7 @@ def bauen():
              faq_schema(rumpf)],
             entwurf=bool(a.get("entwurf")),
             teaser=a["teaser"], datum=a["datum"],
+            bild=a["bild"], bild_alt=a["bild_alt"],
         )
 
     entwuerfe = [a for a in alle if a.get("entwurf")]
