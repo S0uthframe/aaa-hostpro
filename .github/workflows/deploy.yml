@@ -307,9 +307,6 @@ jobs:
             [ "$code" = "200" ] || fehler=$((fehler+1))
           done
           echo
-          code=$(curl -s -o /dev/null -w "%{http_code}" https://aaa-hostpro.de/send.php || true)
-          echo "$code  /send.php (405 erwartet, Formular nimmt nur POST)"
-          echo
           echo "Sprachauszeichnung der Startseiten:"
           for s in "":de "en/":en "ru/":ru "el/":el; do
             pfad="${s%%:*}"; soll="${s##*:}"
