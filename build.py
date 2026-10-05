@@ -364,6 +364,13 @@ def artikelkarten(artikel: list, root: str) -> str:
     return f'<div class="artikel-liste">{"".join(karten)}</div>'
 
 
+def ratgeber_sichtbar() -> bool:
+    """Gibt es einen veroeffentlichten Beitrag? Davon haengt ab, ob es
+    die Uebersicht ueberhaupt gibt - und damit, ob die Fusszeile darauf
+    verweisen darf."""
+    return bool(ratgeber_laden()[0])
+
+
 def chrome(sprachen: dict, code: str, seite: str, root: str) -> dict:
     """Die Ersetzungen, die jede Seite braucht: Kopfzeile, Navigation,
     Sprachumschalter, Fußzeile. Herausgeloest, damit die Ratgeber-Seiten
@@ -375,7 +382,7 @@ def chrome(sprachen: dict, code: str, seite: str, root: str) -> dict:
     # gibt es nur auf Deutsch; ein Link ins Leere waere schlimmer als
     # kein Link.
     fuss_ratgeber = ""
-    if code == "de":
+    if code == "de" and ratgeber_sichtbar():
         fuss_ratgeber = (f'<a href="{root}{RATGEBER_BASIS}">'
                          f'{sprache["chrome"]["ratgeber"]}</a>')
     return {
@@ -583,21 +590,28 @@ def bauen():
         if not entwurf:
             gebaut.append(("de", "ratgeber", pfad))
 
-    # Uebersichtsseite
-    ratgeber_seite(
-        RATGEBER_BASIS,
-        "Ferienwohnung vermieten: Ratgeber f\u00fcr Eigent\u00fcmer | AAA HostPro",
-        "Was Eigent\u00fcmer vor der ersten Buchung kl\u00e4ren sollten, wie viel Arbeit "
-        "Kurzzeitvermietung macht und wann sich die Abgabe an eine Verwaltung rechnet.",
-        (SRC / "ratgeber" / "_hub.html").read_text("utf-8"),
-        [
-            {"@type": "CollectionPage", "@id": f"{DOMAIN}/{RATGEBER_BASIS}",
-             "name": "Ratgeber", "inLanguage": "de-DE",
-             "isPartOf": {"@type": "WebSite", "url": f"{DOMAIN}/"}},
-            brotkrume_schema(sprache, None, RATGEBER_BASIS),
-        ],
-        entwurf=False,
-    )
+    # Die Uebersicht entsteht nur, wenn mindestens ein Beitrag
+    # veroeffentlicht ist. Eine Rubrikseite ohne Inhalte ist fuer
+    # Besucher wertlos und fuer die Suche eine duenne Seite - und der
+    # Link in der Fusszeile zeigte sonst ins Leere.
+    if not sichtbar:
+        print("Ratgeber: kein veroeffentlichter Beitrag, Uebersicht "
+              "entfaellt (auch der Link in der Fusszeile)")
+    else:
+      ratgeber_seite(
+          RATGEBER_BASIS,
+          "Ferienwohnung vermieten: Ratgeber f\u00fcr Eigent\u00fcmer | AAA HostPro",
+          "Was Eigent\u00fcmer vor der ersten Buchung kl\u00e4ren sollten, wie viel Arbeit "
+          "Kurzzeitvermietung macht und wann sich die Abgabe an eine Verwaltung rechnet.",
+          (SRC / "ratgeber" / "_hub.html").read_text("utf-8"),
+          [
+              {"@type": "CollectionPage", "@id": f"{DOMAIN}/{RATGEBER_BASIS}",
+               "name": "Ratgeber", "inLanguage": "de-DE",
+               "isPartOf": {"@type": "WebSite", "url": f"{DOMAIN}/"}},
+              brotkrume_schema(sprache, None, RATGEBER_BASIS),
+          ],
+          entwurf=False,
+      )
 
     # Beitraege
     for a in (alle if ENTWUERFE else sichtbar):
