@@ -44,7 +44,12 @@ jobs:
         run: |
           anzahl=$(find public -name index.html | wc -l)
           echo "Gebaute Seiten: $anzahl"
-          test "$anzahl" -eq 22
+          # Untergrenze statt exakter Zahl: Der Ratgeber waechst, ein
+          # fester Wert muesste bei jedem Beitrag nachgezogen werden -
+          # und wird dann irgendwann gedankenlos erhoeht. Die Grenze
+          # faengt den Fall ab, auf den es ankommt: dass der Bau
+          # zusammengebrochen ist.
+          test "$anzahl" -ge 22
           # Keine übrig gebliebenen Platzhalter
           ! grep -rl '{{' public --include='*.html'
           test -f public/sitemap.xml
