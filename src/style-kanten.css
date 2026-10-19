@@ -1,0 +1,28 @@
+
+/* ---- Kanten ------------------------------------------------------------
+Die Seite kam mit abgerundeten Panels und Bildern. Auf Wunsch sind die
+Rundungen wieder raus - und zwar hier, nicht in style.css: Diese Datei
+ist die unveraenderte Original-Vorlage, und ein Eingriff dort macht
+jeden kuenftigen Vergleich gegen das Original unlesbar. Die Rundungen
+haengen saemtlich an zwei Variablen, deshalb genuegt es, die beiden zu
+nullen. Erfasst sind damit:
+
+  .hero (untere Ecken), .image-statement, jedes img, die letzte
+  .soft-Sektion vor der Fusszeile, der Einzug von footer.tuck, dazu
+  Aufmacher, Beitragskarten und Hinweiskasten im Ratgeber sowie die
+  Karte auf der Kontaktseite.
+
+footer.tuck rechnet mit --r: margin-top:calc(-1*var(--r)) wird damit zu
+0 und padding-top auf die urspruenglichen 80px. Der Einzug entfaellt
+also sauber, statt zu zerbrechen.
+
+Nicht angefasst: .button und die Sprach-Chips bleiben Pillen (999px).
+Eine Pille ist ein eigenes Gestaltungselement, keine "abgerundete
+Ecke" - und ein rechteckiger Knopf waere eine Entscheidung, die so
+nicht getroffen wurde. */
+:root{--r:0px;--r-img:0px}
+
+/* Das Sprachmenue ist ein Panel wie die uebrigen - der Konsistenz
+wegen mit. Die Flaggen behalten ihre 2px, die verhindern den
+Aufkleber-Eindruck an der Kante. */
+.lang-panel{border-radius:0}

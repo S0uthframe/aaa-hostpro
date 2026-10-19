@@ -467,7 +467,7 @@ def bauen():
     # Zuletzt geschrieben gewinnt in der Kaskade bei gleicher
     # Spezifitaet – unsere Ergaenzungen duerfen die Regeln des Originals
     # nicht ueberstimmen, nur ergaenzen. Deshalb stehen sie am Ende.
-    GLOBAL = ["style-lang.css", "style-effekte.css"]
+    GLOBAL = ["style-lang.css", "style-effekte.css", "style-kanten.css"]
     css_global = "".join((SRC / n).read_text("utf-8") for n in GLOBAL)
     css_zusatz = {
         p.stem.replace("style-", ""): p.read_text("utf-8")
