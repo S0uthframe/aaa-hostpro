@@ -50,13 +50,14 @@
     "consent_usa": "Mit einer Einwilligung in die Statistik willigen Sie zugleich nach Art. 49 Abs. 1 lit. a DSGVO in eine Verarbeitung Ihrer Daten in den USA ein. Der Europäische Gerichtshof hat festgestellt, dass dort kein gleichwertiges Schutzniveau besteht: US-Behörden können auf personenbezogene Daten zugreifen, ohne dass dagegen ein wirksamer Rechtsbehelf zur Verfügung steht.",
     "consent_essenziell": "Essenziell",
     "consent_essenziell_info": "Notwendig für den Betrieb. Gespeichert wird ausschließlich Ihre Entscheidung aus diesem Fenster, lokal in Ihrem Browser (localStorage, Schlüssel „aaa-consent“). Sie wird nicht an uns übertragen. Es werden keine Cookies gesetzt.",
-    "consent_statistik": "Statistiken",
+    "consent_statistik": "Reichweitenmessung mit Google Analytics",
     "consent_statistik_info": "Google Analytics 4, Anbieter Google Ireland Limited, Dublin. Zweck: anonyme Messung, welche Seiten gelesen werden. Cookies _ga und _ga_G-72D2GSX9RW, Laufzeit bis zu zwei Jahre. Eine Übermittlung in die USA ist möglich. Ohne Ihre Einwilligung wird nichts gesetzt und nichts übertragen.",
     "consent_details": "Welche Daten genau",
     "consent_alle": "Alle akzeptieren",
     "consent_nur": "Nur essenzielle",
     "consent_speichern": "Auswahl speichern",
-    "consent_schliessen": "Fenster schließen und nur essenzielle Dienste verwenden"
+    "consent_schliessen": "Fenster schließen und nur essenzielle Dienste verwenden",
+    "consent_statistik_kurz": "Wir messen mit Google Analytics, welche Seiten gelesen werden, um sie zu verbessern. Dabei werden personenbezogene Daten verarbeitet. Das geschieht nur mit Ihrer Zustimmung."
   },
   "nav": {
     "index": "Startseite",
@@ -91,7 +92,7 @@
     },
     "datenschutz": {
       "title": "AAA HostPro — Datenschutz",
-      "description": "Datenschutz"
+      "description": "Datenschutzerklärung von AAA HostPro, Alexandra Obermaier, Bad Abbach: Verantwortlicher, Hosting, Kontaktformular, CRM, Reichweitenmessung und Ihre Rechte."
     }
   }
 }

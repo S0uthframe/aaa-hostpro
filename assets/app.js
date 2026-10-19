@@ -151,8 +151,26 @@ Einwilligungsfenster, das daran scheitert, sperrt die Seite aus. */
   try { return localStorage.getItem(SCHLUESSEL); } catch (e) { return null; }
  }
 
+ var geladen = false;
+
+ // Einfacher Consent Mode: Das Google-Tag wird erst nach einer
+ // Zustimmung ueberhaupt angefordert. Im erweiterten Modus laedt es
+ // sofort und sendet auch ohne Einwilligung cookielose Signale -
+ // die tragen Zeitstempel, Browserangaben, Verweisquelle und die
+ // IP-Adresse. Die Datenschutzerklaerung sagt zu, dass vor der
+ // Zustimmung nichts uebertragen wird; das ist nur so zu halten.
+ function tagLaden() {
+  if (geladen) return;
+  geladen = true;
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=G-72D2GSX9RW';
+  document.head.appendChild(s);
+ }
+
  function anwenden(wert) {
   if (typeof gtag === 'function') gtag('consent', 'update', { analytics_storage: wert });
+  if (wert === 'granted') tagLaden();
  }
 
  function oeffnen() {

@@ -461,6 +461,7 @@ def chrome(sprachen: dict, code: str, seite: str, root: str) -> dict:
         "t_consent_essenziell": sprache["chrome"]["consent_essenziell"],
         "t_consent_essenziell_info": sprache["chrome"]["consent_essenziell_info"],
         "t_consent_statistik": sprache["chrome"]["consent_statistik"],
+        "t_consent_statistik_kurz": sprache["chrome"]["consent_statistik_kurz"],
         "t_consent_statistik_info": sprache["chrome"]["consent_statistik_info"],
         "t_consent_details": sprache["chrome"]["consent_details"],
         "t_consent_alle": sprache["chrome"]["consent_alle"],
