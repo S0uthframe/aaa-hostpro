@@ -98,7 +98,7 @@ SEITEN = {
         "body_class": "",
         "og_image": "living-1200.jpg",
         "preload": None,
-        "extra_css": "kontakt",
+        "extra_css": "",
         "tuck": False,
     },
     # Impressum und Datenschutz tragen kein <em>, also auch keinen
@@ -552,7 +552,8 @@ def bauen():
     # Spezifitaet – unsere Ergaenzungen duerfen die Regeln des Originals
     # nicht ueberstimmen, nur ergaenzen. Deshalb stehen sie am Ende.
     GLOBAL = ["style-lang.css", "style-effekte.css", "style-kanten.css",
-              "style-consent.css"]
+              "style-consent.css", "style-startseite.css",
+              "style-kopfzeile.css", "style-formular.css"]
     if hero_video():
         GLOBAL = GLOBAL + ["style-video.css"]
     css_global = "".join((SRC / n).read_text("utf-8") for n in GLOBAL)
@@ -580,6 +581,24 @@ def bauen():
             css = css_basis + css_zusatz.get(konf.get("extra_css", ""), "") + css_global
 
             inhalt = quelle.read_text("utf-8")
+
+            # Nur-Deutsch-Bloecke. Die Zielgruppendefinition sieht
+            # vor, zunaechst nur Deutsch auszubauen. Solche Abschnitte
+            # stehen zwischen {{de}} und {{/de}} und werden fuer die
+            # uebrigen Sprachen entfernt - und zwar VOR dem Einsetzen
+            # der Texte. Sonst verlangte der Bau Uebersetzungen fuer
+            # Absaetze, die in diesen Sprachen gar nicht erscheinen,
+            # und braeche ab.
+            # {{de}}...{{/de}} erscheint nur auf Deutsch,
+            # {{fremd}}...{{/fremd}} nur in den uebrigen Sprachen. So
+            # koennen beide Fassungen nebeneinander im selben Template
+            # stehen, ohne sich zu stoeren.
+            if code == "de":
+                inhalt = inhalt.replace("{{de}}", "").replace("{{/de}}", "")
+                inhalt = re.sub(r"\{\{fremd\}\}.*?\{\{/fremd\}\}", "", inhalt, flags=re.S)
+            else:
+                inhalt = re.sub(r"\{\{de\}\}.*?\{\{/de\}\}", "", inhalt, flags=re.S)
+                inhalt = inhalt.replace("{{fremd}}", "").replace("{{/fremd}}", "")
 
             # Texte einsetzen. Eine fehlende Übersetzung ist ein Fehler
             # und kein Grund, still auf Deutsch zurückzufallen – eine

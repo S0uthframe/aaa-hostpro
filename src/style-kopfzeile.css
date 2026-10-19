@@ -1,0 +1,28 @@
+
+/* ---- Mitlaufende Kopfzeile ----------------------------------------------
+Die Kopfzeile lag bisher absolut am Seitenanfang und scrollte weg.
+Jetzt bleibt sie stehen.
+
+position:fixed statt sticky: Auf den Hero-Seiten liegt die Kopfzeile
+ueber dem Bild, nicht darueber im Fluss - sticky wuerde dort einen
+100px hohen Streifen einschieben und den Hero nach unten druecken.
+Fixed verhaelt sich bei Scrollposition 0 exakt wie vorher, die
+vorhandenen Innenabstaende der Unterseiten passen also weiter.
+
+Auf Hero-Seiten ist sie zunaechst durchsichtig mit weisser Schrift.
+Sobald der Hero durchgescrollt ist, setzt app.js die Klasse "fest":
+Ohne das staende weisse Schrift auf hellem Grund - unlesbar, und bei
+Kontrastanforderungen ein Fehler, keine Geschmacksfrage. */
+.site-header{position:fixed}
+.site-header{transition:background-color .25s ease,color .25s ease,box-shadow .25s ease}
+
+.has-hero .site-header.fest{background:var(--base);color:var(--ink);box-shadow:0 1px 0 var(--line)}
+.has-hero .site-header.fest .brand-name small{color:var(--muted)}
+
+/* Ohne Hero ist die Kopfzeile von Anfang an gedeckt; dort braucht es
+   nur die Trennlinie, sobald etwas darunter wegscrollt. */
+.site-header.fest{box-shadow:0 1px 0 var(--line)}
+
+@media(prefers-reduced-motion:reduce){
+  .site-header{transition:none}
+}

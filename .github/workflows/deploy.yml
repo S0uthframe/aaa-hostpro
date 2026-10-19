@@ -61,6 +61,22 @@ jobs:
           test -f public/impressum/index.html
           test -f public/datenschutz/index.html
 
+      - name: Keine Platzhalter im Ergebnis
+        # Waehrend der Ueberarbeitung stehen an Stellen, fuer die noch
+        # Geschaeftsangaben fehlen, sichtbare Platzhalter. Die duerfen
+        # unter keinen Umstaenden ausgeliefert werden. Verlassen kann
+        # man sich darauf nur, wenn es jemand prueft, der nicht
+        # vergisst - also die Pipeline, nicht der Mensch.
+        run: |
+          if grep -rl 'PLATZHALTER' public --include=*.html; then
+            echo
+            echo "FEHLER: Die obigen Seiten enthalten noch Platzhalter."
+            echo "Vor dem Ausliefern muessen sie durch echte Angaben"
+            echo "ersetzt oder die Abschnitte entfernt werden."
+            exit 1
+          fi
+          echo "Keine Platzhalter gefunden."
+
       - name: .htaccess vorhanden?
         # Sie traegt die Weiterleitungen des Altbestands und die
         # HTTPS-Vereinheitlichung. Fehlt sie, faellt das sonst erst

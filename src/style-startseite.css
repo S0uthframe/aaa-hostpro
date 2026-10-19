@@ -1,0 +1,21 @@
+
+/* ---- Startseite: Belege und Kennzahlen ----------------------------------
+Zwei Zahlenreihen, gebaut aus vorhandenen Bausteinen: .number traegt
+schon die Serifenschrift in Akzentfarbe, .label die Versalien. Neu ist
+allein das Raster. Kein neues Farb- oder Schriftsystem. */
+.beweise,.kennzahlen{display:grid;grid-template-columns:repeat(4,1fr);gap:44px 40px;margin-top:52px}
+.beweise .number,.kennzahlen .number{display:block;margin-bottom:12px}
+.beweise p,.kennzahlen p{font-size:14px;line-height:1.55;color:var(--muted)}
+.dark .beweise p,.dark .kennzahlen p{color:var(--light)}
+
+/* Das Anfrageformular auf der Startseite. Nutzt dasselbe zweispaltige
+   Raster wie .intro - die Kontaktseite bringt ihr eigenes mit, das
+   hier wegen des Hero-Abstands nicht passt. */
+.anfrage{display:grid;grid-template-columns:1fr 1fr;gap:96px;align-items:start;scroll-margin-top:120px}
+.anfrage h2{margin-bottom:24px}
+.anfrage>div>p:not(.label){color:var(--muted)}
+
+@media(max-width:900px){
+  .beweise,.kennzahlen{grid-template-columns:1fr 1fr;gap:34px 28px}
+  .anfrage{grid-template-columns:1fr;gap:48px}
+}

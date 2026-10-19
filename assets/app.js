@@ -275,3 +275,36 @@ Standbild haengt und ruckelt, ist schlechter als kein Video. */
  // behelligen.
  if (versuch && versuch.catch) versuch.catch(function () {});
 })();
+
+
+/* ---- Mitlaufende Kopfzeile ----------------------------------------------
+Setzt "fest", sobald die Seite angescrollt ist. Auf Hero-Seiten
+wechselt die Kopfzeile damit von durchsichtig auf gedeckt - sonst
+staende weisse Schrift auf hellem Grund.
+
+Der Schwellwert richtet sich nach der Hoehe der Kopfzeile, nicht nach
+einer festen Zahl: Sobald mehr als diese Hoehe weggescrollt ist, liegt
+unter der Kopfzeile sicher Inhalt und nicht mehr der Hero-Anfang.
+
+Gemessen wird in requestAnimationFrame. Ein Scroll-Ereignis feuert
+dutzendfach pro Sekunde; jedes Mal das Layout zu lesen und eine Klasse
+zu setzen, ruckelt auf schwaecheren Geraeten sichtbar. */
+(function () {
+ var kopf = document.querySelector('.site-header');
+ if (!kopf) return;
+ var schwelle = kopf.offsetHeight || 100;
+ var wartet = false;
+
+ function pruefen() {
+  wartet = false;
+  kopf.classList.toggle('fest', window.scrollY > schwelle * 0.6);
+ }
+
+ window.addEventListener('scroll', function () {
+  if (wartet) return;
+  wartet = true;
+  requestAnimationFrame(pruefen);
+ }, { passive: true });
+
+ pruefen();
+})();
