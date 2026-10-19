@@ -218,3 +218,50 @@ Einwilligungsfenster, das daran scheitert, sperrt die Seite aus. */
   oeffnen();
  });
 })();
+
+
+/* ---- Bewegtes Hero ------------------------------------------------------
+Die Quellen stehen in data-hero-video, nicht als <source> im Markup.
+Nur so laesst sich vor dem ersten Byte entscheiden, ob ueberhaupt
+geladen wird - ein Browser beginnt sonst bereits mit dem Puffern,
+bevor hier irgendetwas geprueft werden koennte.
+
+Nicht geladen wird in zwei Faellen:
+
+  * prefers-reduced-motion. Dauerbewegung im Sichtfeld loest bei
+    vestibulaeren Stoerungen Schwindel und Uebelkeit aus. Das ist
+    keine Vorliebe, und die Einstellung ist die ausdrueckliche Bitte
+    der Besucherin, es zu lassen.
+
+  * Save-Data. Wer dem Browser gesagt hat, er moege Daten sparen,
+    meint nicht "ausser beim Hintergrundvideo".
+
+Das Standbild bleibt in beiden Faellen stehen und ist ohnehin das
+LCP-Element. Eingeblendet wird erst bei "playing", nicht schon beim
+Start des Ladens: Ein halb gepuffertes Video, das ueber dem
+Standbild haengt und ruckelt, ist schlechter als kein Video. */
+(function () {
+ var video = document.querySelector('[data-hero-video]');
+ if (!video) return;
+
+ var ruhig = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ var sparen = navigator.connection && navigator.connection.saveData;
+ if (ruhig || sparen) return;
+
+ video.getAttribute('data-hero-video').split(',').forEach(function (eintrag) {
+  var teile = eintrag.split('|');
+  var q = document.createElement('source');
+  q.src = teile[0];
+  q.type = teile[1];
+  video.appendChild(q);
+ });
+
+ video.addEventListener('playing', function () { video.classList.add('laeuft'); });
+ video.preload = 'auto';
+ video.load();
+ var versuch = video.play();
+ // Scheitert der Start - etwa wegen einer Browsereinstellung -, bleibt
+ // das Standbild stehen. Kein Grund, die Seite mit einem Fehler zu
+ // behelligen.
+ if (versuch && versuch.catch) versuch.catch(function () {});
+})();

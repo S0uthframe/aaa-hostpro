@@ -1,0 +1,22 @@
+
+/* ---- Bewegtes Hero ------------------------------------------------------
+Liegt deckungsgleich ueber dem Standbild und blendet sich ein, sobald
+es tatsaechlich laeuft. Vorher ist es unsichtbar - faellt das Laden
+aus, bleibt schlicht das Standbild stehen, und niemand sieht eine
+schwarze Flaeche.
+
+Dieselbe z-Ebene wie .hero-img. Da es im Markup danach steht, liegt
+es darueber; der Schleier (.hero-shade, z-index -2) bleibt ueber
+beiden. */
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-3;opacity:0;transition:opacity 1.2s ease;pointer-events:none}
+.hero-video.laeuft{opacity:1}
+
+/* Wer Bewegung reduziert, bekommt das Video gar nicht erst geladen -
+   das entscheidet app.js. Die Regel hier ist der zweite Riegel fuer
+   den Fall, dass die Einstellung erst nach dem Laden umgestellt
+   wird. Dauerbewegung im Sichtfeld ist fuer Menschen mit
+   vestibulaeren Stoerungen ein ernstes Problem, keine
+   Geschmacksfrage. */
+@media(prefers-reduced-motion:reduce){
+  .hero-video{display:none}
+}

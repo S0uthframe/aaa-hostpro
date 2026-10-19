@@ -1,0 +1,24 @@
+Hier liegen die Videodateien des bewegten Heros.
+
+Erwartet werden hero.mp4 und hero.webm. Liegt keine von beiden hier,
+baut build.py die Startseite unveraendert mit dem Standbild - es
+faellt nichts aus und nichts bricht.
+
+Aus einem GIF entstehen die Dateien so:
+
+    werkzeuge/gif-zu-video.sh pfad/zum/original.gif hero
+
+Danach einmal "python3 build.py", und das Video ist drin.
+
+Warum nicht das GIF selbst: Das Format kennt keine
+Interframe-Kompression, jedes Bild wird praktisch einzeln
+gespeichert. Eine fotorealistische Animation in Heroauflösung landet
+damit schnell im zweistelligen Megabyte-Bereich. An einem erzeugten
+Testbild gemessen: 1,7 MB GIF gegen 420 KB MP4, bei gleichem
+Aussehen - und echtes Filmmaterial komprimiert deutlich besser als
+ein Testmuster.
+
+Das Standbild bleibt in jedem Fall im Markup und bleibt das
+LCP-Element. Das Video legt sich erst darueber, wenn es laeuft.
+Geladen wird es nicht bei prefers-reduced-motion und nicht bei
+aktivem Save-Data.

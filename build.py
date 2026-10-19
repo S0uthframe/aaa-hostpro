@@ -404,6 +404,34 @@ def ratgeber_sichtbar() -> bool:
     return bool(ratgeber_laden()[0])
 
 
+def hero_video() -> str:
+    """Bewegtes Hero, wenn die Dateien da sind - sonst nichts.
+
+    Das Standbild bleibt in jedem Fall im Markup und bleibt das
+    LCP-Element: Es ist vorgeladen und auf den ersten Bildaufbau hin
+    gebaut. Das Video legt sich erst darueber, sobald es laeuft. Damit
+    kostet die Bewegung keine Ladezeit, und bleibt sie aus, sieht
+    niemand ein Loch.
+
+    Ohne src und ohne <source> im Markup: Ob ueberhaupt geladen wird,
+    entscheidet app.js anhand von prefers-reduced-motion und
+    Save-Data. Staende die Quelle hier, begaennen Browser mit dem
+    Laden vor dieser Pruefung - und genau das soll die Pruefung
+    verhindern.
+    """
+    ordner = WURZEL / "assets" / "video"
+    quellen = []
+    # WebM zuerst: Wer es kann, nimmt es; die uebrigen fallen auf MP4.
+    for datei, typ in (("hero.webm", "video/webm"), ("hero.mp4", "video/mp4")):
+        if (ordner / datei).exists():
+            quellen.append(f"/assets/video/{datei}|{typ}")
+    if not quellen:
+        return ""
+    return ('<video class="hero-video" muted loop playsinline preload="none" '
+            'aria-hidden="true" tabindex="-1" data-hero-video="'
+            + ",".join(quellen) + '"></video>')
+
+
 def chrome(sprachen: dict, code: str, seite: str, root: str) -> dict:
     """Die Ersetzungen, die jede Seite braucht: Kopfzeile, Navigation,
     Sprachumschalter, Fußzeile. Herausgeloest, damit die Ratgeber-Seiten
@@ -487,6 +515,8 @@ def bauen():
     # nicht ueberstimmen, nur ergaenzen. Deshalb stehen sie am Ende.
     GLOBAL = ["style-lang.css", "style-effekte.css", "style-kanten.css",
               "style-consent.css"]
+    if hero_video():
+        GLOBAL = GLOBAL + ["style-video.css"]
     css_global = "".join((SRC / n).read_text("utf-8") for n in GLOBAL)
     css_zusatz = {
         p.stem.replace("style-", ""): p.read_text("utf-8")
@@ -534,6 +564,10 @@ def bauen():
                 )
 
             # Marker in den Seiteninhalten auflösen
+            # Das bewegte Hero steht im Seitenrumpf, nicht im Gerüst:
+            # Nur die Startseite hat eins, und nur dort gibt es den
+            # Platzhalter.
+            inhalt = inhalt.replace("{{hero_video}}", hero_video())
             inhalt = inhalt.replace("{{root}}", root)
             inhalt = re.sub(
                 r"\{\{u:([a-z-]+)\}\}",
