@@ -1,0 +1,128 @@
+name: Altbestand aufnehmen
+
+# Reine Bestandsaufnahme. Dieser Workflow aendert auf dem Server
+# NICHTS: kein rsync, kein rm, kein mv, kein Schreibzugriff. Er meldet
+# sich an, listet und meldet zurueck.
+#
+# Hintergrund: Der Deploy laeuft bewusst ohne --delete. Alles, was aus
+# der WordPress-Zeit auf dem Server liegt und keine Entsprechung im
+# Neubau hat, liegt also weiterhin dort und wird weiterhin
+# ausgeliefert. Bevor irgendetwas umgeleitet oder entfernt wird, muss
+# erst auf dem Tisch liegen, WAS da ist.
+#
+# buchung.aaa-hostpro.de ist eine eigene Subdomain mit eigenem
+# Verzeichnis neben DEPLOY_PATH. Sie wird hier nur daraufhin geprueft,
+# dass sie tatsaechlich ausserhalb liegt - angefasst wird sie nicht.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  bestand:
+    name: Bestand auf dem Server lesen
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Neubau erzeugen (zum Abgleich)
+        run: python3 build.py
+
+      - name: SSH-Key einrichten
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Known Hosts eintragen
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Bestand lesen
+        # Die Pfade werden relativ ausgegeben. Absolut wuerde GitHub sie
+        # maskieren, weil DEPLOY_PATH ein Secret ist - das Protokoll
+        # bestuende dann aus Sternchen.
+        run: |
+          ZIEL="$(printf '%s' "${{ secrets.DEPLOY_PATH }}" | tr -d '[:space:]')"
+          test -n "$ZIEL" && test "$ZIEL" != "/"
+
+          ssh -p ${{ secrets.SSH_PORT }} \
+              "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+              "export ZIEL='$ZIEL'; bash -s" <<'FERN' > bestand.txt
+            cd "$ZIEL" || exit 1
+
+            echo "### Verzeichnisse, zwei Ebenen"
+            find . -maxdepth 2 -type d -not -path './assets*' \
+              | sed 's|^\./||' | sort
+            echo
+
+            echo "### Alle HTML-Dateien mit Datum und Groesse"
+            find . -type f \( -name '*.html' -o -name '*.htm' -o -name '*.php' \) \
+              -printf '%TY-%Tm-%Td  %7s  %p\n' | sed 's|\./||' | sort
+            echo
+
+            echo "### Nicht-HTML im Wurzelverzeichnis"
+            find . -maxdepth 1 -type f -not -name '*.html' -not -name '*.htm' \
+              -printf '%TY-%Tm-%Td  %7s  %p\n' | sed 's|\./||' | sort
+            echo
+
+            echo "### WordPress-Reste"
+            for d in wp-admin wp-includes wp-content wp-json; do
+              [ -e "$d" ] && echo "VORHANDEN: $d  ($(du -sh "$d" 2>/dev/null | cut -f1))"
+            done
+            [ -f wp-config.php ] && echo "VORHANDEN: wp-config.php"
+            echo "(nichts weiter aufgelistet heisst: nicht vorhanden)"
+            echo
+
+            echo "### .htaccess"
+            if [ -f .htaccess ]; then
+              echo "--- Anfang .htaccess ---"; cat .htaccess; echo "--- Ende .htaccess ---"
+            else
+              echo "keine .htaccess im Wurzelverzeichnis"
+            fi
+            echo
+
+            echo "### Titel jeder HTML-Datei (alt oder neu erkennen)"
+            find . -type f -name 'index.html' | sort | while read -r f; do
+              t=$(grep -o '<title>[^<]*</title>' "$f" 2>/dev/null | head -1 \
+                  | sed 's|</\?title>||g')
+              printf '%-55s %s\n' "${f#./}" "${t:-(kein Title)}"
+            done
+            echo
+
+            echo "### Gesamtgroesse"
+            du -sh . 2>/dev/null
+            echo
+
+            echo "### Liegt die Buchungs-Subdomain ausserhalb?"
+            if [ -d "$(dirname "$ZIEL")/buchung.aaa-hostpro.de" ]; then
+              echo "JA - eigenes Verzeichnis neben dem Zielpfad, vom Deploy nicht beruehrt."
+            else
+              echo "Nicht als Nachbarverzeichnis gefunden - vor Aufraeumarbeiten klaeren."
+            fi
+          FERN
+
+          echo "Zeilen gelesen: $(wc -l < bestand.txt)"
+
+      - name: Abgleich gegen den Neubau
+        # Welche ausgelieferten Dateien stammen NICHT aus dem Neubau?
+        # Genau die sind der Altbestand.
+        run: |
+          (cd public && find . -type f | sed 's|^\./||' | sort) > neu.txt
+          echo "Dateien im Neubau: $(wc -l < neu.txt)"
+          {
+            echo
+            echo "### Im Neubau enthalten (zum Abgleich)"
+            cat neu.txt
+          } >> bestand.txt
+
+      - name: Bericht ausgeben
+        run: cat bestand.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bestandsaufnahme
+          path: bestand.txt
