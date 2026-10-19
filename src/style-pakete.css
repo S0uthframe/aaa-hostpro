@@ -50,17 +50,25 @@ Hinterlegung ist sehr hell: Sie soll fuehren, nicht schreien. */
   .tafel-unter{font-size:18px;margin-top:40px}
 }
 
-/* Drei Saetze ueber der Tafel. Die Tabelle zeigt die Unterschiede
-   genau, aber man muss sie sich aus Haken zusammensuchen. Diese drei
-   Zeilen sagen in einem Satz, was jede Stufe ausmacht. */
-.paket-kurz{list-style:none;padding:0;margin:40px 0 0;display:grid;gap:12px}
-.paket-kurz li{color:var(--muted);font-size:16px;line-height:1.6;
-  padding-left:20px;position:relative;max-width:70ch}
-.paket-kurz li:before{content:'';position:absolute;left:0;top:11px;
-  width:7px;height:7px;background:var(--accent)}
-.paket-kurz strong{color:var(--ink);font-weight:500}
-.paket-kurz + .tafel-rolle{margin-top:40px}
 
 /* Wer antwortet und in welcher Frist. Steht direkt ueber dem Knopf,
    weil das die letzte Zeile vor dem Klick ist. */
 .form-note.antwort{color:var(--ink)}
+
+/* Wege zum Formular. Der deutsche Teil hatte ausser im Hero keinen
+   einzigen Knopf; wer unten ankam, musste selbst zurueckscrollen.
+   Jetzt endet jeder laengere Abschnitt mit dem naechsten Schritt. */
+.cta-block{margin-top:44px}
+.dark .cta-block{margin-top:36px}
+@media(max-width:640px){.cta-block{margin-top:36px}}
+
+/* Der Prozess-Abschnitt ist ein zweispaltiges Raster. Ein Knopf
+   darin wird sonst zum dritten Rasterfeld und auf Spaltenbreite
+   gestreckt. Er bekommt die volle Breite zugewiesen und richtet
+   sich links aus, statt sie auszufuellen. */
+.process > .cta-block{grid-column:1/-1;justify-self:start}
+
+/* Satz direkt unter der Ueberschrift in der linken Spalte. Die
+   Farbregel der Abschnitte faerbt Absaetze dort grau; hier soll er
+   zur Ueberschrift gehoeren, also etwas kraeftiger. */
+.intro > div > .unter-headline{margin-top:24px;font-size:16px;line-height:1.6;max-width:42ch}
