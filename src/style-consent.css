@@ -1,34 +1,77 @@
 
-/* ---- Einwilligung -------------------------------------------------------
-Feste Leiste am unteren Rand. Fest positioniert, damit sie beim
-Einblenden nichts verschiebt: Der Hinweis erscheint erst, nachdem das
-Skript gelaufen ist, und ein mitlaufendes Element an dieser Stelle
-wuerde den gesamten Seiteninhalt nach oben schieben - messbar als
-Layoutverschiebung.
+/* ---- Datenschutzeinstellungen -------------------------------------------
+Eigenes Fenster statt Leiste am Seitenrand: Die Entscheidung bekommt
+damit die Aufmerksamkeit, die ihr zusteht, und es ist Platz fuer das,
+was rechtlich dazugehoert - Hinweis fuer unter 16-Jaehrige,
+Freiwilligkeit, Drittlanduebermittlung, Aufschluesselung je Kategorie.
 
-Zustimmen und Ablehnen tragen bewusst dieselbe Gestaltung: gleiche
-Groesse, gleiche Farbe, gleiche Schrift, nebeneinander. Ein optisch
-zurueckgenommener Ablehnen-Knopf ist nach der Rechtsprechung keine
-gleichwertige Wahl, und genau daran scheitern die meisten Banner. */
-.consent{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--ink);color:var(--light);padding:22px 4%;box-shadow:0 -1px 0 #49423B}
-.consent[hidden]{display:none}
-.consent-innen{width:min(1200px,100%);margin-inline:auto;display:flex;align-items:center;gap:40px}
-.consent-text{flex:1}
-.consent-titel{font-size:14px;letter-spacing:.04em;margin-bottom:8px;color:white}
-.consent-text p:not(.consent-titel){font-size:13px;line-height:1.65;max-width:72ch;color:#CFC7BD;margin:0}
-.consent-text a{color:#D3A87E;text-underline-offset:4px}
-.consent-knoepfe{display:flex;gap:14px;flex-shrink:0}
-/* Gleiche Breite, damit keiner der beiden durch Zufall groesser
-   wirkt als der andere - die Beschriftungen sind verschieden lang. */
-.consent-knoepfe .button{min-width:168px}
+Gebaut auf <dialog> mit showModal(): Fokusfalle, Hintergrund inert und
+Escape-Behandlung kommen damit vom Browser statt aus nachgebautem
+JavaScript. Das Original-CSS legt dialog bildschirmfuellend aus, das
+ist fuer das Mobilmenue gedacht - hier mit hoeherer Spezifitaet
+zurueckgenommen. */
+#consent{position:fixed;inset:0;margin:auto;width:min(620px,calc(100% - 32px));max-width:none;max-height:min(86vh,860px);height:auto;padding:0;border:0;overflow:auto;background:var(--base);color:var(--ink);box-shadow:0 30px 80px rgba(20,17,14,.3)}
+#consent::backdrop{background:rgba(20,17,14,.62)}
+#consent>*{padding-inline:44px}
+
+.consent-x{position:absolute;top:16px;right:18px;background:none;border:0;font-size:26px;line-height:1;color:var(--muted);cursor:pointer;padding:6px 10px}
+.consent-x:hover{color:var(--ink)}
+
+.consent-kopf{padding-top:40px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.consent-marke{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+.consent-kopf h2{font-size:30px}
+
+.consent-koerper{padding-top:26px;padding-bottom:8px}
+.consent-koerper p{font-size:14px;line-height:1.7;color:var(--muted);max-width:none}
+.consent-koerper p+p{margin-top:16px}
+
+/* Der Drittlandhinweis ist der Absatz, der die Einwilligung
+   rechtlich traegt - er steht abgesetzt, nicht im Fliesstext
+   versteckt. */
+.consent-warnung{margin-top:20px!important;padding:18px 20px;background:var(--soft);font-size:13px!important;line-height:1.65!important}
+
+.consent-kategorien{display:flex;gap:16px;margin-top:28px}
+.consent-kat{flex:1;display:flex;align-items:center;gap:12px;padding:16px 18px;border:1px solid var(--line);background:var(--base);cursor:pointer;font-size:14px}
+.consent-kat:hover{border-color:var(--strong)}
+.consent-kat input{width:18px;height:18px;flex-shrink:0;accent-color:var(--accent);cursor:pointer}
+.consent-kat-fest{cursor:default;color:var(--muted)}
+.consent-kat-fest:hover{border-color:var(--line)}
+.consent-kat-fest input{cursor:default}
+
+.consent-details{margin-top:20px;border-top:1px solid var(--line);padding-top:18px}
+.consent-details summary{cursor:pointer;font-size:13px;color:var(--strong);list-style:none}
+.consent-details summary::-webkit-details-marker{display:none}
+.consent-details summary:after{content:' +'}
+.consent-details[open] summary:after{content:' \2212'}
+.consent-details p{margin-top:16px;font-size:13px;line-height:1.65;color:var(--muted)}
+
+/* Alle drei Knoepfe gleich gross und gleich gestaltet, untereinander.
+   Im Vorbild steht "Nur essenzielle" als dritter von vier Knoepfen
+   unter "Alle akzeptieren" - eine Ablehnung, die tiefer liegt und
+   laenger zu lesen ist als die Zustimmung, ist keine gleichwertige
+   Wahl. Hier steht sie direkt daneben, in derselben Groesse. */
+.consent-knoepfe{display:flex;flex-direction:column;gap:10px;padding-top:28px;padding-bottom:24px}
+.consent-knoepfe .button{width:100%;justify-content:center;gap:0}
+
+.consent-fuss{display:flex;gap:28px;padding-top:18px;padding-bottom:26px;border-top:1px solid var(--line);font-size:12px}
+.consent-fuss a{color:var(--muted);text-decoration:none;border-bottom:1px solid var(--line);padding-bottom:2px}
+.consent-fuss a:hover{color:var(--ink);border-color:var(--strong)}
 
 /* Der Wiederaufruf in der Fusszeile ist eine Handlung, kein Ziel -
-   deshalb ein button. Er wird den Nachbarlinks angeglichen. */
+   deshalb ein button, den Nachbarlinks angeglichen. */
 .consent-wieder{background:none;border:0;padding:0;color:inherit;font:inherit;font-size:11px;cursor:pointer;text-align:left}
 .consent-wieder:hover{color:#D3A87E}
 
-@media(max-width:900px){
-  .consent{padding:20px 24px}
-  .consent-innen{flex-direction:column;align-items:stretch;gap:18px}
-  .consent-knoepfe .button{flex:1;min-width:0}
+@media(max-width:640px){
+  #consent{width:calc(100% - 20px);max-height:92vh}
+  #consent>*{padding-inline:24px}
+  .consent-kopf{padding-top:32px}
+  .consent-kopf h2{font-size:25px}
+  .consent-kategorien{flex-direction:column;gap:10px}
 }
+
+/* Der Kopf traegt den Startfokus (siehe layout.html). Er ist damit
+   fokussierbar, aber kein Bedienelement - ein Fokusring waere hier
+   irrefuehrend. Die Tastaturbedienung bleibt unberuehrt: Tab fuehrt
+   von hier auf das Kreuz und weiter durch die Knoepfe. */
+.consent-kopf:focus{outline:none}

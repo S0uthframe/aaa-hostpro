@@ -126,20 +126,26 @@ if (!ruhe.matches && 'IntersectionObserver' in window) {
  });
 }
 
-/* ---- Einwilligung ------------------------------------------------------
+/* ---- Datenschutzeinstellungen ------------------------------------------
 Der gtag-Schnipsel im Kopf setzt alle Einwilligungsarten auf "denied".
 Erst eine Zustimmung hebt analytics_storage auf "granted". Werbung
 bleibt dauerhaft gesperrt: Wir schalten keine, also gibt es dafuer
-auch nichts zu erlauben.
+auch nichts zu erlauben - ein Schalter ohne Wirkung waere eine Luege
+im Interface.
 
-Die Entscheidung liegt im localStorage und verlaesst den Browser nicht.
-Jeder Zugriff darauf steht in einem try: Im privaten Fenster und bei
-gesperrten Websitedaten wirft bereits das Lesen eine Ausnahme, und ein
-Einwilligungshinweis, der daran scheitert, sperrt die Seite aus. */
+Geoeffnet wird mit showModal(). Damit uebernimmt der Browser die
+Fokusfalle, macht den Hintergrund inert und liefert das
+cancel-Ereignis. Nachgebaut waere all das schlechter.
+
+Die Entscheidung liegt im localStorage und verlaesst den Browser
+nicht. Jeder Zugriff steht in einem try: Im privaten Fenster und bei
+gesperrten Websitedaten wirft bereits das Lesen, und ein
+Einwilligungsfenster, das daran scheitert, sperrt die Seite aus. */
 (function () {
  var SCHLUESSEL = 'aaa-consent';
- var kasten = document.getElementById('consent');
- if (!kasten) return;
+ var fenster = document.getElementById('consent');
+ if (!fenster) return;
+ var haken = document.getElementById('consent-statistik');
 
  function lesen() {
   try { return localStorage.getItem(SCHLUESSEL); } catch (e) { return null; }
@@ -149,10 +155,18 @@ Einwilligungshinweis, der daran scheitert, sperrt die Seite aus. */
   if (typeof gtag === 'function') gtag('consent', 'update', { analytics_storage: wert });
  }
 
+ function oeffnen() {
+  // Den Schalter auf den gespeicherten Stand setzen, damit das
+  // Fenster beim Wiederaufruf zeigt, was gerade gilt.
+  if (haken) haken.checked = lesen() === 'granted';
+  if (!fenster.open) fenster.showModal();
+ }
+
  function entscheiden(wert) {
+  if (wert === 'auswahl') wert = (haken && haken.checked) ? 'granted' : 'denied';
   anwenden(wert);
   try { localStorage.setItem(SCHLUESSEL, wert); } catch (e) {}
-  kasten.hidden = true;
+  if (fenster.open) fenster.close();
  }
 
  var gespeichert = lesen();
@@ -162,20 +176,27 @@ Einwilligungshinweis, der daran scheitert, sperrt die Seite aus. */
   // Weder zugestimmt noch abgelehnt: fragen. Eine Ablehnung wird
   // nicht erneut vorgelegt - das waere die Frage so lange zu
   // wiederholen, bis die gewuenschte Antwort kommt.
-  kasten.hidden = false;
+  oeffnen();
  }
 
- kasten.addEventListener('click', function (e) {
+ fenster.addEventListener('click', function (e) {
   var knopf = e.target.closest('[data-consent]');
   if (knopf) entscheiden(knopf.getAttribute('data-consent'));
+ });
+
+ // Escape schliesst ein dialog von sich aus. Ohne Zutun waere das ein
+ // Weggehen ohne Entscheidung, und beim naechsten Aufruf stuende das
+ // Fenster wieder da. Escape gilt deshalb als Ablehnung - dieselbe
+ // Wirkung wie das Kreuz, auf das es beschriftet ist.
+ fenster.addEventListener('cancel', function (e) {
+  e.preventDefault();
+  entscheiden('denied');
  });
 
  document.addEventListener('click', function (e) {
   var ausloeser = e.target.closest('[data-consent-oeffnen]');
   if (!ausloeser) return;
   e.preventDefault();
-  kasten.hidden = false;
-  var erster = kasten.querySelector('[data-consent]');
-  if (erster) erster.focus();
+  oeffnen();
  });
 })();
