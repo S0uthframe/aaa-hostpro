@@ -75,8 +75,9 @@ MENUE = ["index", "arbitrage", "co-hosting", "about"]
 SEITEN = {
     "index": {
         "body_class": "has-hero",
-        "og_image": "chalet-1200.jpg",
-        "preload": ("chalet", [600, 750, 900, 1200, 1672]),
+        "og_image": "alpen-1120.jpg",
+        "preload": ("alpen", [600, 750, 900, 1120]),
+        "preload_hoch": ("alpen-hoch", [400, 540]),
     },
     "arbitrage": {
         "body_class": "has-hero",
@@ -142,14 +143,30 @@ def url(sprache: dict, seite: str) -> str:
 
 
 def preload_tag(seite: dict) -> str:
+    """Vorladen des Hero-Bildes - des LCP-Elements.
+
+    Gibt es eine hochkante Fassung, tragen beide Preloads ein media:
+    Ohne das laedt ein Telefon erst das quere Bild aus dem Preload und
+    danach das hochkante aus dem <picture> - zwei Bilder fuer einen
+    Platz. Nachgemessen und genau so aufgetreten.
+    """
     if not seite["preload"]:
         return ""
     basis, breiten = seite["preload"]
-    srcset = ", ".join(f"/assets/img/{basis}-{b}.webp {b}w" for b in breiten)
-    return (
-        '<link rel="preload" as="image" type="image/webp" '
-        f'imagesrcset="{srcset}" imagesizes="100vw" fetchpriority="high">'
-    )
+    hoch = seite.get("preload_hoch")
+
+    def tag(name: str, b: list, media: str = "") -> str:
+        srcset = ", ".join(f"/assets/img/{name}-{x}.webp {x}w" for x in b)
+        m = f' media="{media}"' if media else ""
+        return ('<link rel="preload" as="image" type="image/webp" '
+                f'imagesrcset="{srcset}" imagesizes="100vw"{m} '
+                'fetchpriority="high">')
+
+    if not hoch:
+        return tag(basis, breiten)
+    name_hoch, breiten_hoch = hoch
+    return (tag(name_hoch, breiten_hoch, "(max-width:640px)")
+            + tag(basis, breiten, "(min-width:641px)"))
 
 
 def hreflang_tags(sprachen: dict, seite: str) -> str:
@@ -351,6 +368,10 @@ def jsonld_block(*teile) -> str:
 # verhindern, dass die Seite beim Nachladen des Bildes springt.
 BILDER = {
     "chalet":  (1672, 941,  [600, 750, 900, 1200, 1672]),
+    # Standbild des bewegten Heros: das erste Bild des Videos.
+    # Breiter als die Quelle wird nicht skaliert - Hochrechnen
+    # erfindet keine Schaerfe, kostet aber Bytes.
+    "alpen":   (1120, 630,  [600, 750, 900, 1120]),
     "bed":     (1800, 1200, [600, 750, 900, 1200, 1800]),
     "table":   (1800, 1200, [600, 750, 900, 1200, 1800]),
     "living":  (1800, 1200, [600, 750, 900, 1200, 1800]),
