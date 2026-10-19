@@ -316,6 +316,17 @@ jobs:
             echo "$ist" | grep -q "\"$soll\"" || fehler=$((fehler+1))
           done
           echo
+          echo "Altbestand darf nicht mehr oeffentlich sein:"
+          for p in backup-alt/ index.htm contact/ home/; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 \
+                   "https://aaa-hostpro.de/$p")
+            echo "  /$p -> $code"
+            # 200 hiesse: der Altbestand ist zurueck oder die
+            # Weiterleitung fehlt. Alles andere ist in Ordnung.
+            [ "$code" != "200" ] || fehler=$((fehler+1))
+          done
+
+          echo
           if [ "$fehler" -gt 0 ]; then
             echo "FEHLER: $fehler Prüfungen fehlgeschlagen."
             exit 1

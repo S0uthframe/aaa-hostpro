@@ -1,0 +1,118 @@
+name: Altbestand sichern und aus dem Web nehmen
+
+# Verschiebt /backup-alt/ aus dem Web-Verzeichnis eine Ebene nach
+# oben. Bewusst verschoben und nicht gepackt:
+#
+#  * mv ist auf demselben Dateisystem ein Verzeichniseintrag, nicht
+#    844 MB Lesen und Schreiben. Es ist sofort fertig und kann nicht
+#    halb danebengehen.
+#  * Ein tar braeuchte waehrenddessen ein zweites Mal denselben
+#    Speicherplatz. Ob der frei ist, weiss hier niemand.
+#  * Umkehrbar: ein mv zurueck stellt den alten Zustand her.
+#
+# Heruntergeladen wird der Baum ausdruecklich NICHT. Die Sicherungen
+# von All-in-One WP Migration enthalten ueblicherweise die komplette
+# Datenbank samt Benutzertabelle. So etwas gehoert nicht in ein
+# GitHub-Artefakt.
+#
+# Das Ziel liegt neben den Domain-Verzeichnissen und wird von keinem
+# vhost bedient. Fuer den Fall, dass diese Annahme nicht traegt,
+# bekommt das verschobene Verzeichnis zusaetzlich eine .htaccess, die
+# jeden Zugriff verweigert. Guertel und Hosentraeger.
+
+on:
+  workflow_dispatch:
+    inputs:
+      bestaetigung:
+        description: 'Schreibe exakt "verschieben" zur Bestaetigung'
+        required: true
+        type: string
+
+jobs:
+  verschieben:
+    name: backup-alt verschieben
+    runs-on: ubuntu-latest
+    steps:
+      - name: Bestaetigung pruefen
+        run: |
+          if [ "${{ inputs.bestaetigung }}" != "verschieben" ]; then
+            echo "Abgebrochen: Bestaetigung lautete nicht 'verschieben'."
+            exit 1
+          fi
+
+      - name: SSH-Key einrichten
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Known Hosts eintragen
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Verschieben und gegenpruefen
+        run: |
+          ZIEL="$(printf '%s' "${{ secrets.DEPLOY_PATH }}" | tr -d '[:space:]')"
+          test -n "$ZIEL" && test "$ZIEL" != "/"
+
+          ssh -p ${{ secrets.SSH_PORT }} \
+              "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+              "export ZIEL='$ZIEL'; bash -s" <<'FERN'
+            set -e
+            cd "$ZIEL"
+
+            if [ ! -d backup-alt ]; then
+              echo "backup-alt ist nicht vorhanden - nichts zu tun."
+              exit 0
+            fi
+
+            ARCHIV="$(dirname "$ZIEL")/archiv-backup-alt-2026-10-19"
+            if [ -e "$ARCHIV" ]; then
+              echo "FEHLER: Das Archivverzeichnis existiert bereits."
+              echo "Abgebrochen, damit nichts ueberschrieben wird."
+              exit 1
+            fi
+
+            VORHER_DATEIEN=$(find backup-alt -type f | wc -l)
+            VORHER_GROESSE=$(du -sb backup-alt | cut -f1)
+            echo "Vorher: $VORHER_DATEIEN Dateien, $VORHER_GROESSE Bytes"
+
+            mv backup-alt "$ARCHIV"
+
+            NACHHER_DATEIEN=$(find "$ARCHIV" -type f | wc -l)
+            NACHHER_GROESSE=$(du -sb "$ARCHIV" | cut -f1)
+            echo "Nachher: $NACHHER_DATEIEN Dateien, $NACHHER_GROESSE Bytes"
+
+            # Ein mv auf demselben Dateisystem kann nichts verlieren.
+            # Geprueft wird trotzdem: Wer sich darauf verlaesst, ohne
+            # nachzusehen, merkt einen Fehlschlag nie.
+            if [ "$VORHER_DATEIEN" != "$NACHHER_DATEIEN" ] \
+               || [ "$VORHER_GROESSE" != "$NACHHER_GROESSE" ]; then
+              echo "FEHLER: Vorher und nachher stimmen nicht ueberein."
+              exit 1
+            fi
+
+            printf 'Require all denied\n' > "$ARCHIV/.htaccess"
+
+            if [ -e "$ZIEL/backup-alt" ]; then
+              echo "FEHLER: backup-alt liegt noch im Web-Verzeichnis."
+              exit 1
+            fi
+
+            echo
+            echo "backup-alt ist aus dem Web-Verzeichnis verschwunden."
+            echo "Inhalt vollstaendig, Zugriffssperre gesetzt."
+            echo "Verbleibende Groesse des Web-Verzeichnisses:"
+            du -sh "$ZIEL"
+          FERN
+
+      - name: Erreichbarkeit pruefen
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" --max-time 20 \
+                 "https://aaa-hostpro.de/backup-alt/")
+          echo "https://aaa-hostpro.de/backup-alt/  ->  $code"
+          case "$code" in
+            404|403|301|302) echo "Nicht mehr oeffentlich erreichbar." ;;
+            200) echo "FEHLER: Liefert weiterhin 200."; exit 1 ;;
+            *)   echo "Unerwarteter Code - bitte ansehen."; exit 1 ;;
+          esac
