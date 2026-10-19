@@ -91,7 +91,9 @@ jobs:
             echo "  $(wc -c < /tmp/seite.html) Bytes geladen"
             echo
             # Semikolon trennt, damit Begriffe Kommas enthalten duerfen.
-            printf '%s' '${{ inputs.suchen }}' | tr ';' '\n' | while IFS= read -r begriff; do
+            # Der Abschluss-Umbruch muss dazu, sonst verschluckt
+            # "read" den letzten Begriff.
+            printf '%s\n' '${{ inputs.suchen }}' | tr ';' '\n' | while IFS= read -r begriff; do
               begriff="$(printf '%s' "$begriff" | sed -E 's/^ +| +$//g')"
               [ -n "$begriff" ] || continue
               n="$(grep -c -F -- "$begriff" /tmp/seite.html || true)"
