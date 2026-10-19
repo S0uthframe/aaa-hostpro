@@ -7,6 +7,24 @@ if(menu&&toggle){
  menu.addEventListener('close',()=>{toggle.setAttribute('aria-expanded','false');document.body.classList.remove('menu-open');toggle.focus();});
  menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>menu.close()));
 }
+/* ---- Ereignisse an GA4 --------------------------------------------------
+Nur bei erteilter Einwilligung. gtag ist zwar immer definiert, den
+Schnipsel im Kopf legt es an, aber ohne Zustimmung ist das Tag gar
+nicht geladen. Ein Push landete dann im dataLayer und wuerde beim
+spaeteren Zustimmen nachtraeglich mitgesendet. Die
+Datenschutzerklaerung sagt zu, dass vorher nichts uebertragen wird,
+also fragen wir den gespeicherten Stand ab.
+
+Der Lesezugriff steht in einem try: Im privaten Fenster und bei
+gesperrten Websitedaten wirft bereits das Lesen. Ein fehlgeschlagenes
+Ereignis darf das Absenden des Formulars nicht aufhalten. */
+function ereignis(name, daten){
+ try { if (localStorage.getItem('aaa-consent') !== 'granted') return; }
+ catch (e) { return; }
+ try { if (typeof gtag === 'function') gtag('event', name, daten || {}); }
+ catch (e) { /* Messung ist nie wichtiger als die Anfrage. */ }
+}
+
 const form=document.querySelector('#contact-form');
 if(form){
  const ENDPOINT='https://n8n.srv1450872.hstgr.cloud/webhook/kontakt';
@@ -68,13 +86,26 @@ if(form){
    icon.append(path);
    const head=document.createElement('p');head.className='sent-head';head.textContent='Ihre Anfrage ist angekommen.';
    form.classList.add('sent');
+   // generate_lead ist das von GA4 vorgesehene Ereignis fuer genau
+   // diesen Fall. Es laesst sich mit einem Klick zum Schluesselereignis
+   // erklaeren und spaeter nach Google Ads uebernehmen.
+   ereignis('generate_lead', {
+    formular_ort: location.pathname,
+    anliegen: checked.map(b=>b.value).join(',') || 'sonstiges',
+    utm_source: payload.utm_source,
+    utm_medium: payload.utm_medium,
+    utm_campaign: payload.utm_campaign
+   });
    say('success',[icon,head,
-    p('Vielen Dank, '+(payload.name.split(' ')[0]||'vielen Dank')+'. Wir haben Ihre Nachricht erhalten und melden uns in der Regel innerhalb eines Werktags bei Ihnen – telefonisch oder per E-Mail.'),
+    p('Vielen Dank, '+(payload.name.split(' ')[0]||'vielen Dank')+'. Wir haben Ihre Nachricht erhalten und melden uns in der Regel innerhalb eines Werktags bei Ihnen, telefonisch oder per E-Mail.'),
     p('Dringend? Sie erreichen uns direkt unter +49 151 56289700.')]);
    form.scrollIntoView({behavior:'smooth',block:'center'});
   }catch(error){
+   // Ohne das bleibt unsichtbar, wenn n8n Anfragen verliert: Der
+   // Besucher sieht den Hinweis, wir sehen gar nichts.
+   ereignis('formular_fehler', { formular_ort: location.pathname });
    say('error',[
-    p('Die Anfrage konnte gerade nicht übermittelt werden. Bitte senden Sie uns Ihre Nachricht als E-Mail – Ihre Angaben sind bereits vorbereitet.'),
+    p('Die Anfrage konnte gerade nicht übermittelt werden. Bitte senden Sie uns Ihre Nachricht als E-Mail. Ihre Angaben sind bereits vorbereitet.'),
     draftLink(labels),
     p('Alternativ erreichen Sie uns direkt unter info@aaa-hostpro.de oder +49 151 56289700. Ihre Angaben bleiben oben im Formular erhalten.')
    ]);
