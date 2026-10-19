@@ -407,29 +407,46 @@ def ratgeber_sichtbar() -> bool:
 def hero_video() -> str:
     """Bewegtes Hero, wenn die Dateien da sind - sonst nichts.
 
+    Erwartet werden bis zu zwei Fassungen: hero (quer, fuer breite
+    Fenster) und hero-mobil (hochkant). Ein querformatiges Video auf
+    einem Telefon zeigt bei object-fit:cover nur noch einen
+    Bildausschnitt aus der Mitte - vom Motiv bleibt dann wenig uebrig.
+    Fehlt die mobile Fassung, nimmt auch das Telefon die quere.
+
     Das Standbild bleibt in jedem Fall im Markup und bleibt das
     LCP-Element: Es ist vorgeladen und auf den ersten Bildaufbau hin
     gebaut. Das Video legt sich erst darueber, sobald es laeuft. Damit
     kostet die Bewegung keine Ladezeit, und bleibt sie aus, sieht
     niemand ein Loch.
 
-    Ohne src und ohne <source> im Markup: Ob ueberhaupt geladen wird,
-    entscheidet app.js anhand von prefers-reduced-motion und
-    Save-Data. Staende die Quelle hier, begaennen Browser mit dem
-    Laden vor dieser Pruefung - und genau das soll die Pruefung
-    verhindern.
+    Ohne src und ohne <source> im Markup: Ob und welche Fassung
+    geladen wird, entscheidet app.js anhand von Fensterbreite,
+    prefers-reduced-motion und Save-Data. Staende die Quelle hier,
+    begaennen Browser mit dem Laden vor dieser Pruefung - und genau
+    das soll die Pruefung verhindern.
     """
     ordner = WURZEL / "assets" / "video"
-    quellen = []
-    # WebM zuerst: Wer es kann, nimmt es; die uebrigen fallen auf MP4.
-    for datei, typ in (("hero.webm", "video/webm"), ("hero.mp4", "video/mp4")):
-        if (ordner / datei).exists():
-            quellen.append(f"/assets/video/{datei}|{typ}")
-    if not quellen:
+
+    def saetze(rumpf: str) -> str:
+        # WebM zuerst: Wer es kann, nimmt es; die uebrigen MP4.
+        gefunden = []
+        for endung, typ in (("webm", "video/webm"), ("mp4", "video/mp4")):
+            if (ordner / f"{rumpf}.{endung}").exists():
+                gefunden.append(f"/assets/video/{rumpf}.{endung}|{typ}")
+        return ",".join(gefunden)
+
+    quer = saetze("hero")
+    hoch = saetze("hero-mobil")
+    if not quer and not hoch:
         return ""
-    return ('<video class="hero-video" muted loop playsinline preload="none" '
-            'aria-hidden="true" tabindex="-1" data-hero-video="'
-            + ",".join(quellen) + '"></video>')
+
+    attribute = ['class="hero-video"', "muted", "loop", "playsinline",
+                 'preload="none"', 'aria-hidden="true"', 'tabindex="-1"']
+    if quer:
+        attribute.append(f'data-hero-video="{quer}"')
+    if hoch:
+        attribute.append(f'data-hero-video-mobil="{hoch}"')
+    return "<video " + " ".join(attribute) + "></video>"
 
 
 def chrome(sprachen: dict, code: str, seite: str, root: str) -> dict:

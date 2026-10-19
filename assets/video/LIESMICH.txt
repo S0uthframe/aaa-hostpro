@@ -1,24 +1,32 @@
 Hier liegen die Videodateien des bewegten Heros.
 
-Erwartet werden hero.mp4 und hero.webm. Liegt keine von beiden hier,
-baut build.py die Startseite unveraendert mit dem Standbild - es
-faellt nichts aus und nichts bricht.
+Erwartet werden bis zu vier Dateien:
 
-Aus einem GIF entstehen die Dateien so:
+    hero.mp4        hero.webm         quer,     ab 640 px Fensterbreite
+    hero-mobil.mp4  hero-mobil.webm   hochkant, darunter
 
-    werkzeuge/gif-zu-video.sh pfad/zum/original.gif hero
+Liegt keine davon hier, baut build.py die Startseite unveraendert mit
+dem Standbild - es faellt nichts aus und nichts bricht. Fehlt nur die
+mobile Fassung, nimmt auch das Telefon die quere.
 
-Danach einmal "python3 build.py", und das Video ist drin.
+Aus den GIFs entstehen die Dateien so:
+
+    werkzeuge/gif-zu-video.sh pfad/zu/realistisch.gif        hero
+    werkzeuge/gif-zu-video.sh pfad/zu/realistisch-mobile.gif hero-mobil
+
+Danach einmal "python3 build.py".
+
+Warum zwei Fassungen: Ein querformatiges Video auf einem Telefon zeigt
+bei object-fit:cover nur noch einen Ausschnitt aus der Mitte. Vom
+Motiv bliebe wenig uebrig.
 
 Warum nicht das GIF selbst: Das Format kennt keine
-Interframe-Kompression, jedes Bild wird praktisch einzeln
-gespeichert. Eine fotorealistische Animation in Heroauflösung landet
-damit schnell im zweistelligen Megabyte-Bereich. An einem erzeugten
-Testbild gemessen: 1,7 MB GIF gegen 420 KB MP4, bei gleichem
-Aussehen - und echtes Filmmaterial komprimiert deutlich besser als
-ein Testmuster.
+Interframe-Kompression, jedes Bild wird praktisch einzeln gespeichert.
+An erzeugten Testbildern gemessen: 1,3 MB GIF gegen 320 KB MP4, und
+1,0 MB gegen 275 KB bei der hochkanten Fassung. Echtes Filmmaterial
+komprimiert deutlich besser als ein Testmuster.
 
 Das Standbild bleibt in jedem Fall im Markup und bleibt das
 LCP-Element. Das Video legt sich erst darueber, wenn es laeuft.
 Geladen wird es nicht bei prefers-reduced-motion und nicht bei
-aktivem Save-Data.
+aktivem Save-Data - nachgemessen, in beiden Faellen null Anfragen.

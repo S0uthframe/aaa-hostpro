@@ -241,14 +241,24 @@ LCP-Element. Eingeblendet wird erst bei "playing", nicht schon beim
 Start des Ladens: Ein halb gepuffertes Video, das ueber dem
 Standbild haengt und ruckelt, ist schlechter als kein Video. */
 (function () {
- var video = document.querySelector('[data-hero-video]');
+ var video = document.querySelector('.hero-video');
  if (!video) return;
 
  var ruhig = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
  var sparen = navigator.connection && navigator.connection.saveData;
  if (ruhig || sparen) return;
 
- video.getAttribute('data-hero-video').split(',').forEach(function (eintrag) {
+ // Hochkant auf schmalen Fenstern, quer auf breiten. Gewaehlt wird
+ // einmal beim Laden und nicht bei jeder Groessenaenderung: Ein
+ // Wechsel der Quelle mitten im Lauf setzt das Video zurueck, und
+ // ein Telefon dreht sich oefter, als es neu laedt.
+ var schmal = window.matchMedia && window.matchMedia('(max-width: 640px)').matches;
+ var liste = (schmal && video.getAttribute('data-hero-video-mobil'))
+           || video.getAttribute('data-hero-video')
+           || video.getAttribute('data-hero-video-mobil');
+ if (!liste) return;
+
+ liste.split(',').forEach(function (eintrag) {
   var teile = eintrag.split('|');
   var q = document.createElement('source');
   q.src = teile[0];
