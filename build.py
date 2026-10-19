@@ -452,6 +452,13 @@ def chrome(sprachen: dict, code: str, seite: str, root: str) -> dict:
         "t_impressum": sprache["chrome"]["impressum"],
         "t_datenschutz": sprache["chrome"]["datenschutz"],
         "t_top": sprache["chrome"]["top"],
+        "t_consent_aria": sprache["chrome"]["consent_aria"],
+        "t_consent_titel": sprache["chrome"]["consent_titel"],
+        "t_consent_text": sprache["chrome"]["consent_text"],
+        "t_consent_ja": sprache["chrome"]["consent_ja"],
+        "t_consent_nein": sprache["chrome"]["consent_nein"],
+        "t_consent_mehr": sprache["chrome"]["consent_mehr"],
+        "t_consent_link": sprache["chrome"]["consent_link"],
         "t_nav_arbitrage": sprache["nav"]["arbitrage"],
         "t_nav_co_hosting": sprache["nav"]["co-hosting"],
         "t_nav_about": sprache["nav"]["about"],
@@ -467,7 +474,8 @@ def bauen():
     # Zuletzt geschrieben gewinnt in der Kaskade bei gleicher
     # Spezifitaet – unsere Ergaenzungen duerfen die Regeln des Originals
     # nicht ueberstimmen, nur ergaenzen. Deshalb stehen sie am Ende.
-    GLOBAL = ["style-lang.css", "style-effekte.css", "style-kanten.css"]
+    GLOBAL = ["style-lang.css", "style-effekte.css", "style-kanten.css",
+              "style-consent.css"]
     css_global = "".join((SRC / n).read_text("utf-8") for n in GLOBAL)
     css_zusatz = {
         p.stem.replace("style-", ""): p.read_text("utf-8")

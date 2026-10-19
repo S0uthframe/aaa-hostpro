@@ -125,3 +125,57 @@ if (!ruhe.matches && 'IntersectionObserver' in window) {
   });
  });
 }
+
+/* ---- Einwilligung ------------------------------------------------------
+Der gtag-Schnipsel im Kopf setzt alle Einwilligungsarten auf "denied".
+Erst eine Zustimmung hebt analytics_storage auf "granted". Werbung
+bleibt dauerhaft gesperrt: Wir schalten keine, also gibt es dafuer
+auch nichts zu erlauben.
+
+Die Entscheidung liegt im localStorage und verlaesst den Browser nicht.
+Jeder Zugriff darauf steht in einem try: Im privaten Fenster und bei
+gesperrten Websitedaten wirft bereits das Lesen eine Ausnahme, und ein
+Einwilligungshinweis, der daran scheitert, sperrt die Seite aus. */
+(function () {
+ var SCHLUESSEL = 'aaa-consent';
+ var kasten = document.getElementById('consent');
+ if (!kasten) return;
+
+ function lesen() {
+  try { return localStorage.getItem(SCHLUESSEL); } catch (e) { return null; }
+ }
+
+ function anwenden(wert) {
+  if (typeof gtag === 'function') gtag('consent', 'update', { analytics_storage: wert });
+ }
+
+ function entscheiden(wert) {
+  anwenden(wert);
+  try { localStorage.setItem(SCHLUESSEL, wert); } catch (e) {}
+  kasten.hidden = true;
+ }
+
+ var gespeichert = lesen();
+ if (gespeichert === 'granted') {
+  anwenden('granted');
+ } else if (gespeichert !== 'denied') {
+  // Weder zugestimmt noch abgelehnt: fragen. Eine Ablehnung wird
+  // nicht erneut vorgelegt - das waere die Frage so lange zu
+  // wiederholen, bis die gewuenschte Antwort kommt.
+  kasten.hidden = false;
+ }
+
+ kasten.addEventListener('click', function (e) {
+  var knopf = e.target.closest('[data-consent]');
+  if (knopf) entscheiden(knopf.getAttribute('data-consent'));
+ });
+
+ document.addEventListener('click', function (e) {
+  var ausloeser = e.target.closest('[data-consent-oeffnen]');
+  if (!ausloeser) return;
+  e.preventDefault();
+  kasten.hidden = false;
+  var erster = kasten.querySelector('[data-consent]');
+  if (erster) erster.focus();
+ });
+})();

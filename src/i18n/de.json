@@ -39,7 +39,14 @@
     "ratgeber": "Ratgeber",
     "brotkrume": "Sie sind hier",
     "aktualisiert": "Zuletzt aktualisiert am",
-    "lesezeit": "Lesezeit"
+    "lesezeit": "Lesezeit",
+    "consent_aria": "Hinweis zur Reichweitenmessung",
+    "consent_titel": "Anonyme Reichweitenmessung",
+    "consent_text": "Wir messen anonym, welche Seiten gelesen werden, um sie zu verbessern. Das geschieht nur mit Ihrer Zustimmung. Eine Ablehnung hat keine Nachteile.",
+    "consent_ja": "Einverstanden",
+    "consent_nein": "Nur Notwendiges",
+    "consent_mehr": "Datenschutzerklärung",
+    "consent_link": "Cookie-Einstellungen"
   },
   "nav": {
     "index": "Startseite",

@@ -1,0 +1,34 @@
+
+/* ---- Einwilligung -------------------------------------------------------
+Feste Leiste am unteren Rand. Fest positioniert, damit sie beim
+Einblenden nichts verschiebt: Der Hinweis erscheint erst, nachdem das
+Skript gelaufen ist, und ein mitlaufendes Element an dieser Stelle
+wuerde den gesamten Seiteninhalt nach oben schieben - messbar als
+Layoutverschiebung.
+
+Zustimmen und Ablehnen tragen bewusst dieselbe Gestaltung: gleiche
+Groesse, gleiche Farbe, gleiche Schrift, nebeneinander. Ein optisch
+zurueckgenommener Ablehnen-Knopf ist nach der Rechtsprechung keine
+gleichwertige Wahl, und genau daran scheitern die meisten Banner. */
+.consent{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--ink);color:var(--light);padding:22px 4%;box-shadow:0 -1px 0 #49423B}
+.consent[hidden]{display:none}
+.consent-innen{width:min(1200px,100%);margin-inline:auto;display:flex;align-items:center;gap:40px}
+.consent-text{flex:1}
+.consent-titel{font-size:14px;letter-spacing:.04em;margin-bottom:8px;color:white}
+.consent-text p:not(.consent-titel){font-size:13px;line-height:1.65;max-width:72ch;color:#CFC7BD;margin:0}
+.consent-text a{color:#D3A87E;text-underline-offset:4px}
+.consent-knoepfe{display:flex;gap:14px;flex-shrink:0}
+/* Gleiche Breite, damit keiner der beiden durch Zufall groesser
+   wirkt als der andere - die Beschriftungen sind verschieden lang. */
+.consent-knoepfe .button{min-width:168px}
+
+/* Der Wiederaufruf in der Fusszeile ist eine Handlung, kein Ziel -
+   deshalb ein button. Er wird den Nachbarlinks angeglichen. */
+.consent-wieder{background:none;border:0;padding:0;color:inherit;font:inherit;font-size:11px;cursor:pointer;text-align:left}
+.consent-wieder:hover{color:#D3A87E}
+
+@media(max-width:900px){
+  .consent{padding:20px 24px}
+  .consent-innen{flex-direction:column;align-items:stretch;gap:18px}
+  .consent-knoepfe .button{flex:1;min-width:0}
+}

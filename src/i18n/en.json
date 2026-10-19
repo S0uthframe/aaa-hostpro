@@ -33,7 +33,14 @@
     "top": "Back to top",
     "lang_switch": "Choose language",
     "lang_switch_to": "View in English",
-    "accommodations": "Accommodation"
+    "accommodations": "Accommodation",
+    "consent_aria": "Notice about audience measurement",
+    "consent_titel": "Anonymous audience measurement",
+    "consent_text": "We anonymously measure which pages are read, in order to improve them. This happens only with your consent. Declining has no drawbacks.",
+    "consent_ja": "I agree",
+    "consent_nein": "Essential only",
+    "consent_mehr": "Privacy policy (DE)",
+    "consent_link": "Cookie settings"
   },
   "nav": {
     "index": "Home",
