@@ -1,0 +1,51 @@
+/* ---- Leistungstafel der drei Pakete -------------------------------------
+Links die Leistung, rechts drei Spalten mit Haken. Eine echte <table>:
+Der Inhalt IST eine Tabelle, und nur so lesen Screenreader "Zeile
+Bewertungsmanagement, Spalte Komfort, enthalten" vor. Die Haken sind
+aria-hidden, daneben steht der Text verborgen im Markup - ein Haken
+allein ist fuer eine Sprachausgabe stumm.
+
+Die Komfort-Spalte ist hinterlegt, weil sie die Empfehlung ist. Die
+Hinterlegung ist sehr hell: Sie soll fuehren, nicht schreien. */
+.tafel-rolle{margin-top:56px;overflow-x:auto}
+.pakete{width:100%;border-collapse:collapse;font-size:15px}
+.pakete th,.pakete td{padding:17px 12px;border-bottom:1px solid var(--line)}
+
+.pakete thead th{font-size:12px;font-weight:500;letter-spacing:.12em;
+  text-align:center;vertical-align:bottom;border-bottom:1px solid var(--ink);
+  padding-bottom:14px}
+.pakete thead th:first-child{text-align:left;letter-spacing:.16em;
+  color:var(--muted);font-size:11px}
+
+.pakete tbody th{text-align:left;font-weight:400;width:46%;
+  font-family:inherit;font-size:15px;line-height:1.5;letter-spacing:0}
+.pakete td{text-align:center;width:18%}
+
+.pakete .ja{color:var(--accent);font-size:19px;line-height:1}
+.pakete .nein{color:#C9BFB2;font-size:17px;line-height:1}
+
+.pakete .hervor{background:rgba(164,100,60,.06)}
+.pakete thead th.hervor{border-bottom-color:var(--accent)}
+.empfehlung{display:block;font-size:9px;letter-spacing:.14em;
+  color:var(--accent);margin-bottom:9px}
+
+/* Nur fuer Screenreader: im Fluss, aber unsichtbar. display:none
+   waere falsch - das nimmt die Sprachausgabe auch nicht wahr. */
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;
+  clip-path:inset(50%);white-space:nowrap}
+
+.tafel-unter{font-family:Sans,SansFB,Arial,sans-serif;font-size:19px;
+  line-height:1.4;letter-spacing:0;margin:48px 0 14px}
+.nachsatz{margin-top:28px}
+
+@media(max-width:640px){
+  .tafel-rolle{margin-top:40px}
+  .pakete{font-size:13px}
+  .pakete th,.pakete td{padding:13px 5px}
+  .pakete tbody th{width:49%;font-size:13px}
+  .pakete td{width:17%}
+  .pakete thead th{font-size:10px;letter-spacing:.06em}
+  .pakete thead th:first-child{font-size:9px}
+  .empfehlung{font-size:7px;letter-spacing:.1em;margin-bottom:7px}
+  .tafel-unter{font-size:18px;margin-top:40px}
+}

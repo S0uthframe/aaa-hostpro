@@ -16,12 +16,23 @@ Kontrastanforderungen ein Fehler, keine Geschmacksfrage. */
 .site-header{position:fixed}
 .site-header{transition:background-color .25s ease,color .25s ease,box-shadow .25s ease}
 
-.has-hero .site-header.fest{background:var(--base);color:var(--ink);box-shadow:0 1px 0 var(--line)}
+.has-hero .site-header.fest{background:var(--base);color:var(--ink)}
 .has-hero .site-header.fest .brand-name small{color:var(--muted)}
 
-/* Ohne Hero ist die Kopfzeile von Anfang an gedeckt; dort braucht es
-   nur die Trennlinie, sobald etwas darunter wegscrollt. */
-.site-header.fest{box-shadow:0 1px 0 var(--line)}
+/* Die Leiste muss sich vom Inhalt absetzen. Der Text darin steht mit
+   16:1 auf gedecktem Grund, daran lag es nicht - aber die Leiste ist
+   cremefarben wie der Seitenhintergrund, und eine 1px-Linie in
+   --line (#E4DCD1) trennt davon praktisch nichts. Beim Scrollen
+   schiebt sich Flaechentext bis an die Unterkante und verschmilzt
+   optisch mit dem Menue.
+
+   Deshalb: eine sichtbare Trennlinie plus ein weicher Schatten, der
+   die Leiste ueber die Seite hebt. Der Schatten liegt nach unten
+   versetzt und ist weit ausgelaufen, damit er als Hoehe gelesen wird
+   und nicht als zweite Linie. */
+.site-header.fest{
+  box-shadow:0 1px 0 rgba(30,27,24,.14), 0 10px 22px -12px rgba(30,27,24,.3);
+}
 
 @media(prefers-reduced-motion:reduce){
   .site-header{transition:none}

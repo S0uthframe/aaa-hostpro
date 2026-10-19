@@ -553,7 +553,8 @@ def bauen():
     # nicht ueberstimmen, nur ergaenzen. Deshalb stehen sie am Ende.
     GLOBAL = ["style-lang.css", "style-effekte.css", "style-kanten.css",
               "style-consent.css", "style-startseite.css",
-              "style-kopfzeile.css", "style-formular.css"]
+              "style-kopfzeile.css", "style-formular.css",
+          "style-pakete.css"]
     if hero_video():
         GLOBAL = GLOBAL + ["style-video.css"]
     css_global = "".join((SRC / n).read_text("utf-8") for n in GLOBAL)
