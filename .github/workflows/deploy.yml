@@ -61,6 +61,16 @@ jobs:
           test -f public/impressum/index.html
           test -f public/datenschutz/index.html
 
+      - name: .htaccess vorhanden?
+        # Sie traegt die Weiterleitungen des Altbestands und die
+        # HTTPS-Vereinheitlichung. Fehlt sie, faellt das sonst erst
+        # auf, wenn jemand eine alte Adresse aufruft.
+        run: |
+          test -s public/.htaccess
+          echo "public/.htaccess: $(wc -c < public/.htaccess) Bytes"
+          grep -q 'backup-alt' public/.htaccess
+          echo "Weiterleitungen des Altbestands enthalten."
+
       - name: Tote Verweise suchen
         # Die Seiten liegen in drei Verschachtelungstiefen (/, /en/,
         # /en/contact/). Ein falsch berechneter relativer Pfad fällt
@@ -129,6 +139,14 @@ jobs:
           name: website
           path: public
           retention-days: 3
+          # Ohne diese Zeile fehlt die .htaccess. upload-artifact
+          # laesst versteckte Dateien seit v4.4 standardmaessig weg,
+          # und zwar ohne Warnung: Der Lauf meldet Erfolg, der
+          # Zielordner kommt nur unvollstaendig an. Genau so ist die
+          # erste Fassung der Weiterleitungen nie auf dem Server
+          # angekommen - aufgefallen allein daran, dass die
+          # Gegenprobe /index.htm weiterhin mit 200 vorfand.
+          include-hidden-files: true
 
   vorschau:
     name: "Vorschau (überträgt nichts)"
@@ -219,6 +237,18 @@ jobs:
         with:
           name: website
           path: public
+
+      - name: Artefakt vollstaendig?
+        # Geprueft wird nach dem Jobwechsel erneut, nicht nur im Bau:
+        # Verloren gegangen ist die Datei genau hier, beim Hoch- und
+        # Herunterladen - nicht beim Erzeugen.
+        run: |
+          test -s public/.htaccess || {
+            echo "FEHLER: .htaccess hat den Jobwechsel nicht ueberlebt."
+            echo "Vermutlich fehlt include-hidden-files am Upload."
+            exit 1
+          }
+          echo "public/.htaccess ist angekommen."
 
       - name: SSH-Key einrichten
         uses: webfactory/ssh-agent@v0.9.0
