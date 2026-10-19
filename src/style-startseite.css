@@ -19,3 +19,8 @@ allein das Raster. Kein neues Farb- oder Schriftsystem. */
   .beweise,.kennzahlen{grid-template-columns:1fr 1fr;gap:34px 28px}
   .anfrage{grid-template-columns:1fr;gap:48px}
 }
+
+/* Abschliessender Hinweis unter einer Leistungsliste. Eigene Klasse
+   statt style-Attribut im Markup - Inline-Stile lassen sich spaeter
+   nicht zentral aendern. */
+.nachsatz{margin-top:56px;max-width:68ch;color:var(--muted);font-size:16px}
