@@ -48,6 +48,25 @@ jobs:
                "$URL" || echo "  Verbindung fehlgeschlagen."
           echo
 
+          echo "### Noch einmal, als Browser ausgegeben"
+          # Ein 403 aus einem Rechenzentrum ist oft Bot-Abwehr und
+          # nicht die Antwort, die ein Besucher bekommt. Derselbe
+          # Aufruf mit Browser-Kennung trennt die beiden Faelle.
+          curl -s -o /dev/null --max-time 25 \
+               -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36' \
+               -H 'Accept: text/html,application/xhtml+xml' \
+               -H 'Accept-Language: de-DE,de;q=0.9' \
+               -w 'Status: %{http_code}\nGroesse: %{size_download} Bytes\n' \
+               "$URL" || echo "  Verbindung fehlgeschlagen."
+          echo
+
+          echo "### Wurzel der Domain"
+          wurzel="$(printf '%s' "$URL" | sed -E 's#^(https?://[^/?]+).*#\1#')/"
+          curl -s -o /dev/null --max-time 25 \
+               -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36' \
+               -w "$wurzel -> %{http_code}\n" "$wurzel" || echo "  Verbindung fehlgeschlagen."
+          echo
+
           echo "### Kopfzeilen"
           curl -sI --max-time 25 "$URL" | head -20 || true
           echo
