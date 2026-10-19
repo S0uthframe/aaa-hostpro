@@ -14,6 +14,10 @@ on:
         description: 'Vollstaendige URL, mit https://'
         required: true
         type: string
+      suchen:
+        description: 'Optional: Begriffe im Seitentext, mit Semikolon getrennt'
+        required: false
+        type: string
 
 jobs:
   pruefen:
@@ -75,3 +79,26 @@ jobs:
           echo | timeout 20 openssl s_client -connect "${host}:443" -servername "$host" 2>/dev/null \
             | openssl x509 -noout -subject -issuer -dates 2>/dev/null \
             || echo "  Kein Zertifikat abrufbar."
+
+          if [ -n '${{ inputs.suchen }}' ]; then
+            echo
+            echo "### Begriffe im ausgelieferten Text"
+            # Mit Browser-Kennung holen, damit wir denselben Text
+            # sehen wie ein Besucher.
+            curl -sL --max-time 25 \
+                 -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36' \
+                 "$URL" > /tmp/seite.html || { echo "  Abruf fehlgeschlagen."; exit 1; }
+            echo "  $(wc -c < /tmp/seite.html) Bytes geladen"
+            echo
+            # Semikolon trennt, damit Begriffe Kommas enthalten duerfen.
+            printf '%s' '${{ inputs.suchen }}' | tr ';' '\n' | while IFS= read -r begriff; do
+              begriff="$(printf '%s' "$begriff" | sed -E 's/^ +| +$//g')"
+              [ -n "$begriff" ] || continue
+              n="$(grep -c -F -- "$begriff" /tmp/seite.html || true)"
+              if [ "$n" -gt 0 ]; then
+                printf '  %-34s %sx\n' "$begriff" "$n"
+              else
+                printf '  %-34s nicht gefunden\n' "$begriff"
+              fi
+            done
+          fi
