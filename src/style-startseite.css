@@ -24,3 +24,29 @@ allein das Raster. Kein neues Farb- oder Schriftsystem. */
    statt style-Attribut im Markup - Inline-Stile lassen sich spaeter
    nicht zentral aendern. */
 .nachsatz{margin-top:56px;max-width:68ch;color:var(--muted);font-size:16px}
+
+/* ---- Bildbaender und Bildpaare -----------------------------------------
+Die deutschen Seiten waren bis auf die Portraits bildlos. Ein breites
+Band setzt den Betrieb zwischen die Textabschnitte, ohne eine eigene
+Ueberschrift zu brauchen.
+
+aspect-ratio plus width/height am img: Beides zusammen haelt den Platz
+schon vor dem Laden frei. Ohne das springt die Seite beim Nachladen -
+genau der Layoutsprung, den wir an anderer Stelle schon gemessen haben. */
+.bildband img{aspect-ratio:3/2;max-height:640px}
+.bildpaar{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:72px}
+/* picture steht projektweit auf display:contents. Als direktes Kind
+   eines Rasters wird dadurch auch das <source> zum Rasterfeld und
+   belegt die erste Spalte - die beiden Bilder landen dann beide in
+   Spalte zwei, untereinander. Hier also wieder ein eigener Block. */
+.bildpaar picture{display:block}
+.bildpaar img{aspect-ratio:3/2}
+
+@media(max-width:900px){
+  .bildband img{max-height:460px}
+  .bildpaar{gap:24px;margin-top:56px}
+}
+@media(max-width:640px){
+  .bildband img{max-height:340px}
+  .bildpaar{grid-template-columns:1fr;gap:18px;margin-top:44px}
+}
