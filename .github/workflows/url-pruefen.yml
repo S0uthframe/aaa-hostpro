@@ -96,7 +96,10 @@ jobs:
             printf '%s\n' '${{ inputs.suchen }}' | tr ';' '\n' | while IFS= read -r begriff; do
               begriff="$(printf '%s' "$begriff" | sed -E 's/^ +| +$//g')"
               [ -n "$begriff" ] || continue
-              n="$(grep -c -F -- "$begriff" /tmp/seite.html || true)"
+              # grep -c zaehlt Zeilen, nicht Vorkommen. Ausgeliefertes
+              # HTML ist minimiert und steht fast komplett auf einer
+              # Zeile: Fuenf Treffer waeren dort als "1x" erschienen.
+              n="$(grep -o -F -- "$begriff" /tmp/seite.html | wc -l | tr -d ' ')"
               if [ "$n" -gt 0 ]; then
                 printf '  %-34s %sx\n' "$begriff" "$n"
               else
