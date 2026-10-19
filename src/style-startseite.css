@@ -50,3 +50,47 @@ genau der Layoutsprung, den wir an anderer Stelle schon gemessen haben. */
   .bildband img{max-height:340px}
   .bildpaar{grid-template-columns:1fr;gap:18px;margin-top:44px}
 }
+
+/* ---- Hero der Startseite: Abdunklung und Textlage --------------------
+Die Abdunklung lag quer ueber dem ganzen Bild. Links muss sie bleiben,
+dort steht die Ueberschrift in Weiss. Rechts stehen Haus und Herbstlaub,
+dort kostet sie nur Bildwirkung und bringt nichts.
+
+Deshalb ein Verlauf mit Zwischenstopps statt zweier Endwerte: bis etwa
+40 Prozent Breite unveraendert dunkel, danach faellt er schnell ab. Die
+Textspalte endet bei rund 60 Prozent, der Abfall liegt also hinter dem
+Text, nicht darunter.
+
+Der senkrechte Verlauf bleibt wie er ist. Er haelt den oberen Rand
+dunkel, damit die Kopfzeile ueber dem Bild lesbar bleibt, solange sie
+noch durchsichtig ist. */
+.home-hero .hero-shade{
+  background:
+    linear-gradient(90deg,
+      rgba(20,17,14,.68) 0%,
+      rgba(20,17,14,.60) 38%,
+      rgba(20,17,14,.22) 62%,
+      rgba(20,17,14,.06) 100%),
+    linear-gradient(180deg, rgba(20,17,14,.45), transparent 32%);
+}
+
+/* Textblock etwas hoeher, damit er mehr ueber den Bergen steht und
+   weniger vor der Wiese. Der Hero richtet seinen Inhalt unten aus,
+   mehr Abstand nach unten schiebt ihn also nach oben. */
+.home-hero .hero-content{padding-bottom:135px}
+
+@media(min-width:1600px){
+  .home-hero .hero-content{padding-bottom:170px}
+}
+
+@media(max-width:640px){
+  /* Auf dem Telefon liegt der Text ueber einem groesseren Teil des
+     Bildes, dort darf weniger aufgehellt werden. */
+  .home-hero .hero-shade{
+    background:linear-gradient(90deg,
+      rgba(20,17,14,.74) 0%,
+      rgba(20,17,14,.62) 55%,
+      rgba(20,17,14,.26) 100%);
+  }
+  .home-hero .hero-content{padding-bottom:130px}
+}
