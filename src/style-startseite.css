@@ -68,19 +68,19 @@ noch durchsichtig ist. */
   background:
     linear-gradient(90deg,
       rgba(20,17,14,.68) 0%,
-      rgba(20,17,14,.60) 38%,
-      rgba(20,17,14,.22) 62%,
-      rgba(20,17,14,.06) 100%),
+      rgba(20,17,14,.58) 42%,
+      rgba(20,17,14,.12) 58%,
+      rgba(20,17,14,.02) 100%),
     linear-gradient(180deg, rgba(20,17,14,.45), transparent 32%);
 }
 
 /* Textblock etwas hoeher, damit er mehr ueber den Bergen steht und
    weniger vor der Wiese. Der Hero richtet seinen Inhalt unten aus,
    mehr Abstand nach unten schiebt ihn also nach oben. */
-.home-hero .hero-content{padding-bottom:135px}
+.home-hero .hero-content{padding-bottom:175px}
 
 @media(min-width:1600px){
-  .home-hero .hero-content{padding-bottom:170px}
+  .home-hero .hero-content{padding-bottom:215px}
 }
 
 @media(max-width:640px){
@@ -89,8 +89,8 @@ noch durchsichtig ist. */
   .home-hero .hero-shade{
     background:linear-gradient(90deg,
       rgba(20,17,14,.74) 0%,
-      rgba(20,17,14,.62) 55%,
-      rgba(20,17,14,.26) 100%);
+      rgba(20,17,14,.60) 58%,
+      rgba(20,17,14,.16) 100%);
   }
-  .home-hero .hero-content{padding-bottom:130px}
+  .home-hero .hero-content{padding-bottom:165px}
 }
