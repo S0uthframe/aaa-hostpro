@@ -684,6 +684,9 @@ def bauen():
     # Bilder, Schriften, Skript
     shutil.copytree(WURZEL / "assets", ZIEL / "assets")
     shutil.copy(SRC / "robots.txt", ZIEL / "robots.txt")
+    # .htaccess lag bisher nur auf dem Server. Jetzt aus dem Build,
+    # damit sie beim naechsten Deploy nicht ueberschrieben wird.
+    shutil.copy(SRC / "htaccess", ZIEL / ".htaccess")
 
     # Sitemap mit Sprachalternativen – so findet Google die
     # Übersetzungen auch dann, wenn es nur die Sitemap liest.

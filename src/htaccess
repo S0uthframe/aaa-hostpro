@@ -1,0 +1,83 @@
+# AAA HostPro — Performance & Sicherheit (Apache / ALL-INKL)
+#
+# Diese Datei lag seit dem 14.09.2026 auf dem Server, stammte aber
+# nicht aus dem Build. Sie wird hier unveraendert uebernommen, damit
+# es eine einzige Quelle gibt: Ohne das haette der naechste Deploy
+# sie entweder ueberschrieben oder sie waere dauerhaft nur auf dem
+# Server gepflegt worden und beim naechsten Umzug verloren gegangen.
+# Neu ist allein der Abschnitt "Altbestand" am Ende.
+
+# ---------- Kompression ----------
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/plain text/css text/javascript application/javascript application/json application/xml image/svg+xml
+</IfModule>
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css text/javascript application/javascript application/json application/xml image/svg+xml
+</IfModule>
+
+# ---------- Browser-Caching ----------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault                          "access plus 1 month"
+  ExpiresByType text/html                 "access plus 0 seconds"
+  ExpiresByType text/css                  "access plus 1 year"
+  ExpiresByType application/javascript    "access plus 1 year"
+  ExpiresByType image/jpeg                "access plus 1 year"
+  ExpiresByType image/webp                "access plus 1 year"
+  ExpiresByType image/svg+xml             "access plus 1 year"
+  ExpiresByType font/woff2                "access plus 1 year"
+  ExpiresByType font/ttf                  "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(jpg|jpeg|webp|svg|woff2|ttf|css|js)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ---------- MIME-Typen ----------
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType font/woff2 .woff2
+</IfModule>
+
+# ---------- HTTPS + www-Vereinheitlichung ----------
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+
+  # ---------- Altbestand ----------
+  # Unter /backup-alt/ liegt eine vollstaendige WordPress-Installation
+  # vom 01.-04.09.2026, rund 844 MB, mit Elementor, drei Themes und
+  # dem Sicherungsverzeichnis von All-in-One WP Migration. Sie wird
+  # oeffentlich ausgeliefert und enthaelt ausfuehrbares PHP.
+  #
+  # Diese Regel ist die schnelle, umkehrbare Massnahme: Der Baum ist
+  # damit ueber das Web nicht mehr erreichbar und faellt ueber die
+  # 301 nach und nach aus dem Index. Sie ersetzt NICHT das Loeschen -
+  # die Dateien liegen weiterhin auf der Platte.
+  #
+  # Bewusst NICHT zusaetzlich in robots.txt gesperrt: Google muss die
+  # Adressen abrufen duerfen, um die Weiterleitung ueberhaupt zu
+  # sehen. Ein Disallow wuerde die Seiten im Index einfrieren statt
+  # sie zu entfernen.
+  RewriteRule ^backup-alt(/.*)?$ / [R=301,L]
+
+  # Platzhalterdatei des Hosters, 85 KB, liegt seit dem 14.09. in der
+  # Wurzel. Aus dem Build ist sie laengst raus.
+  RewriteRule ^index\.htm$ / [R=301,L]
+
+  # Adressen aus der WordPress-Zeit. Der Anker ^ bezieht sich auf die
+  # Wurzel, deshalb bleiben /en/contact/, /ru/contact/ und
+  # /el/contact/ unberuehrt - die existieren und sind korrekt.
+  RewriteRule ^contact/?$ /kontakt/ [R=301,L]
+  RewriteRule ^home/?$ / [R=301,L]
+</IfModule>
