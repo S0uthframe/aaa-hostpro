@@ -43,6 +43,51 @@
       "datum": "2026-10-05",
       "bild": "bed",
       "bild_alt": "Frisch bezogenes Doppelbett in einer Ferienwohnung"
+    },
+    {
+      "slug": "wohnung-vermieten-worauf-achten",
+      "titel": "Wohnung vermieten: Worauf Sie am Anfang achten müssen",
+      "beschreibung": "Dauermiete, Wohnen auf Zeit oder Ferienwohnung: die Entscheidungen am Anfang, die später teuer zu korrigieren sind.",
+      "teaser": "Für alle, die ganz am Anfang stehen. Welche Nutzungsart passt, wer Ihnen die Vermietung untersagen kann, und was anfällt, bevor etwas hereinkommt.",
+      "datum": "2026-10-20",
+      "bild": "wohnraum",
+      "bild_alt": "Wohnbereich einer vermieteten Wohnung mit Sofa, Couchtisch und Garderobe"
+    },
+    {
+      "slug": "kurzzeitvermietung-oder-dauermiete",
+      "titel": "Kurzzeitvermietung oder Dauermiete: Was sich für Sie rechnet",
+      "beschreibung": "Nicht der Nachtpreis entscheidet, sondern Auslastung, Abzüge und Arbeitszeit. Ein Rechenweg für beide Modelle.",
+      "teaser": "90 Euro mal 20 Nächte klingt eindeutig. Was in dieser Rechnung fehlt, und wie Sie beide Modelle mit denselben Annahmen vergleichen.",
+      "datum": "2026-10-20",
+      "bild": "schlafraum",
+      "bild_alt": "Schlafbereich mit Kleiderschrank und Sessel, Blick in den Wohnbereich"
+    },
+    {
+      "slug": "was-kostet-ferienwohnung-verwalten-lassen",
+      "titel": "Was kostet es, eine Ferienwohnung verwalten zu lassen?",
+      "beschreibung": "Erfolgsanteil, Mindesthonorar, Bemessungsgrundlage: wie Honorare aufgebaut sind und welche fünf Fragen Angebote vergleichbar machen.",
+      "teaser": "Zwei Angebote mit derselben Prozentzahl können sich um mehrere hundert Euro im Monat unterscheiden. Es kommt darauf an, worauf gerechnet wird.",
+      "datum": "2026-10-20",
+      "bild": "table",
+      "bild_alt": "Gedeckter Esstisch in einer betreuten Ferienwohnung"
+    },
+    {
+      "slug": "monteurwohnung-vermieten",
+      "titel": "Monteurwohnung vermieten: Was anders läuft als bei Feriengästen",
+      "beschreibung": "Längere Aufenthalte, weniger Wechsel, Firmenkunden: wie Wohnen auf Zeit funktioniert und welche Ausstattung darüber entscheidet.",
+      "teaser": "Zwischen Dauermiete und Ferienwohnung liegt ein Markt, den viele Eigentümer übersehen. Er bringt mehr als die Dauermiete, bei einem Bruchteil der Wechsel.",
+      "datum": "2026-10-20",
+      "bild": "betten",
+      "bild_alt": "Schlafbereich mit zwei Einzelbetten und frischen Handtüchern"
+    },
+    {
+      "slug": "ferienwohnung-bayern-pflichten",
+      "titel": "Pflichten für Vermieter in Bayern: Registrierung, Kurbeitrag, Steuern",
+      "beschreibung": "Seit April 2026 können bayerische Gemeinden eine Registrierungspflicht für Kurzzeitvermietung einführen. Was sonst noch gilt und wer verbindlich Auskunft gibt.",
+      "teaser": "Vier Regelwerke greifen gleichzeitig, und eines davon ist neu. Was Sie klären müssen, bevor das Inserat online geht.",
+      "datum": "2026-10-20",
+      "bild": "chalet",
+      "bild_alt": "Ferienhaus in alpiner Umgebung im Herbst"
     }
   ]
 }
