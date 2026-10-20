@@ -67,31 +67,31 @@
   },
   "pages": {
     "index": {
-      "title": "AAA HostPro | Kurzzeitvermietungs-Management für Eigentümer",
+      "title": "Kurzzeitvermietung-Management für Eigentümer | AAA HostPro",
       "description": "Professionelles Management für Ihre Kurzzeitvermietung: Arbitrage und Co-Hosting für Eigentümer, Investoren und Vermieter. Transparent und persönlich."
     },
     "arbitrage": {
-      "title": "AAA HostPro | Arbitrage & Rent-to-Rent",
-      "description": "Wir mieten Ihre Immobilie an und übernehmen den Betrieb als Kurzzeitunterkunft. Lernen Sie das Rent-to-Rent-Modell von AAA HostPro kennen."
+      "title": "Wohnung an Unternehmen vermieten: Rent-to-Rent | AAA HostPro",
+      "description": "Wir mieten Ihre Immobilie langfristig an und betreiben die Kurzzeitvermietung. Sie erhalten die vereinbarte Miete, wir tragen den Alltag."
     },
     "co-hosting": {
       "title": "Ferienwohnung verwalten lassen, Co-Hosting | AAA HostPro",
-      "description": "Ferienwohnung verwalten lassen, ohne die Kontrolle abzugeben: Gäste, Preise, Reinigung, Kontrollen. Vor Ort um Regensburg, deutschlandweit digital."
+      "description": "Ferienwohnung verwalten lassen, ohne die Kontrolle abzugeben: Inserate, Preise, Gäste und Abrechnung im vereinbarten Umfang. Deutschlandweit."
     },
     "about": {
-      "title": "AAA HostPro | Über uns, persönlich an Ihrer Seite",
+      "title": "Über uns, persönlich an Ihrer Seite | AAA HostPro",
       "description": "Lernen Sie Alex und Linda kennen: Ihre Ansprechpartnerinnen bei AAA HostPro für professionelle und persönliche Immobilienbetreuung."
     },
     "kontakt": {
-      "title": "AAA HostPro | Kontakt, sprechen wir über Ihre Immobilie",
+      "title": "Kontakt: sprechen wir über Ihre Immobilie | AAA HostPro",
       "description": "Sprechen Sie mit AAA HostPro über Ihre Immobilie. Kontakt für Co-Hosting, Rent-to-Rent und eine kostenlose Potenzial-Analyse."
     },
     "impressum": {
-      "title": "AAA HostPro | Impressum",
-      "description": "Impressum"
+      "title": "Impressum | AAA HostPro",
+      "description": "Impressum von AAA HostPro, Alexandra Obermaier, Bad Abbach. Anbieterkennzeichnung nach § 5 DDG sowie Angaben zu Haftung und Urheberrecht."
     },
     "datenschutz": {
-      "title": "AAA HostPro | Datenschutz",
+      "title": "Datenschutz | AAA HostPro",
       "description": "Datenschutzerklärung von AAA HostPro, Alexandra Obermaier, Bad Abbach: Verantwortlicher, Hosting, Kontaktformular, CRM, Reichweitenmessung und Ihre Rechte."
     }
   }

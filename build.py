@@ -353,6 +353,34 @@ def faq_schema(rumpf: str) -> dict | None:
     }
 
 
+def organisation_schema() -> dict:
+    """Das Unternehmen als Entitaet, auf jeder Seite mit derselben @id.
+
+    Nur belegte Angaben: Anschrift und Rufnummer stehen im Impressum,
+    das Profil in der Fusszeile. Oeffnungszeiten, Koordinaten,
+    Preisspanne und Bewertungen fehlen bewusst - was wir nicht
+    nachweisen koennen, gehoert nicht ins Schema.
+    """
+    return {
+        "@type": "ProfessionalService",
+        "@id": f"{DOMAIN}/#organisation",
+        "name": "AAA HostPro",
+        "url": f"{DOMAIN}/",
+        "email": "info@aaa-hostpro.de",
+        "telephone": "+4915156289700",
+        "founder": {"@type": "Person", "name": "Alexandra Obermaier"},
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Untere Dorfstra\u00dfe 17",
+            "postalCode": "93077",
+            "addressLocality": "Bad Abbach",
+            "addressCountry": "DE",
+        },
+        "areaServed": {"@type": "Country", "name": "Deutschland"},
+        "sameAs": ["https://www.instagram.com/aaa.hostpro"],
+    }
+
+
 def jsonld_block(*teile) -> str:
     objekte = [t for t in teile if t]
     if not objekte:
@@ -654,7 +682,10 @@ def bauen():
                 "body_class": konf["body_class"],
                 "footer_class": ' class="tuck"' if konf.get("tuck", True) else "",
                 "main": inhalt.strip(),
-                "jsonld": "",
+                # Organisation auf jeder Seite, FAQPage nur dort, wo
+                # tatsaechlich Fragen sichtbar stehen.
+                "jsonld": jsonld_block(organisation_schema(),
+                                       faq_schema(inhalt)),
             })
 
             seiteninhalt = layout
@@ -713,7 +744,7 @@ def bauen():
 
         inhalt = brotkrume(sprache, root, titel if pfad != RATGEBER_BASIS else None) + inhalt
 
-        kopf = jsonld_block(*schema_extra)
+        kopf = jsonld_block(organisation_schema(), *schema_extra)
         if entwurf:
             # Ein Entwurf, der doch einmal ausgeliefert wird, soll nicht
             # in der Suche landen.

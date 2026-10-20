@@ -72,3 +72,11 @@ Hinterlegung ist sehr hell: Sie soll fuehren, nicht schreien. */
    Farbregel der Abschnitte faerbt Absaetze dort grau; hier soll er
    zur Ueberschrift gehoeren, also etwas kraeftiger. */
 .intro > div > .unter-headline{margin-top:24px;font-size:16px;line-height:1.6;max-width:42ch}
+
+/* Wege aus den Leistungsseiten in den Ratgeber. Vorher verlief der
+   Verkehr nur in eine Richtung: Die Beitraege schickten Leser ins
+   Formular, aber keine Hauptseite verwies zurueck in die Beitraege. */
+.rat-links{list-style:none;padding:0;margin:32px 0 0;display:grid;gap:14px}
+.rat-links a{text-decoration:none;border-bottom:1px solid var(--line);
+  padding-bottom:12px;display:inline-block;font-size:17px;line-height:1.5}
+.rat-links a:hover{border-color:var(--strong);color:var(--strong)}
