@@ -94,3 +94,10 @@ noch durchsichtig ist. */
   }
   .home-hero .hero-content{padding-bottom:165px}
 }
+
+/* Hohe Motive im breiten Band. Der Streifen schneidet mittig zu, bei
+   einem Haus faellt damit der Giebel heraus. "hoch" verschiebt den
+   Ausschnitt nach oben und gibt dem Band etwas mehr Hoehe. */
+.bildband.hoch img{object-position:center 28%;max-height:720px}
+@media(max-width:900px){.bildband.hoch img{max-height:500px}}
+@media(max-width:640px){.bildband.hoch img{max-height:380px}}

@@ -411,6 +411,12 @@ BILDER = {
     "betten":     (1800, 1200, [600, 750, 900, 1200, 1800]),
     "schlafraum": (1800, 1200, [600, 750, 900, 1200, 1800]),
     "sofa":       (1800, 1200, [600, 750, 900, 1200, 1800]),
+    # Stimmungsbilder. Nicht unsere Objekte, deshalb tragen die
+    # Alternativtexte auch keine Besitzaussage.
+    "ferienhaus-alpen":    (1800, 1204, [600, 750, 900, 1200, 1800]),
+    "schlafzimmer-balkon": (1800, 1200, [600, 750, 900, 1200, 1800]),
+    "wohnzimmer-hell":     (1200, 1799, [400, 540, 700, 900, 1200]),
+    "altbau-strasse":      (1200, 1719, [400, 540, 700, 900, 1200]),
 }
 
 
