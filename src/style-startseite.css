@@ -101,3 +101,12 @@ noch durchsichtig ist. */
 .bildband.hoch img{object-position:center 28%;max-height:720px}
 @media(max-width:900px){.bildband.hoch img{max-height:500px}}
 @media(max-width:640px){.bildband.hoch img{max-height:380px}}
+
+/* Bild in der Ueberschriftenspalte von "Digital gefuehrt". Dort stand
+   bisher nur Label und Ueberschrift, darunter blieb die halbe Spalte
+   leer. Fuer den Prozess-Abschnitt gibt es die Regel bereits in
+   style.css (.process-heading img), hier fehlte sie. */
+.intro > div > picture img{margin-top:40px;aspect-ratio:4/3}
+@media(max-width:900px){
+  .intro > div > picture img{margin-top:28px;max-width:520px}
+}
