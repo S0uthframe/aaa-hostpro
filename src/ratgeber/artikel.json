@@ -19,7 +19,7 @@
   "artikel": [
     {
       "slug": "ferienwohnung-vermieten-was-beachten",
-      "titel": "Ferienwohnung vermieten: Was Sie vorher klären müssen",
+      "titel": "Ferienwohnung vermieten: was vorher zu klären",
       "beschreibung": "Zweckentfremdung, Teilungserklärung, Versicherung, Steuern, Meldepflichten: die Checkliste, bevor die erste Buchung hereinkommt.",
       "teaser": "Die meisten Probleme entstehen nicht im Betrieb, sondern davor, weil eine Frage nicht gestellt wurde, die sich später teuer beantwortet.",
       "datum": "2026-10-05",
@@ -28,7 +28,7 @@
     },
     {
       "slug": "co-hosting-airbnb-ferienwohnung",
-      "titel": "Co-Hosting bei Airbnb & Co.: Was ein Co-Host übernimmt",
+      "titel": "Co-Hosting bei Airbnb: was ein Co-Host macht",
       "beschreibung": "Sie bleiben Vermieter, jemand anderes übernimmt den Betrieb. Was dazugehört, was es kostet und wann es sich nicht lohnt.",
       "teaser": "Was ein Co-Host konkret übernimmt, woran sich ein seriöses Angebot erkennen lässt, und wann sich das Modell für Ihr Objekt nicht lohnt.",
       "datum": "2026-10-05",
@@ -37,8 +37,8 @@
     },
     {
       "slug": "ferienwohnung-selbst-vermieten-oder-verwalten-lassen",
-      "titel": "Ferienwohnung selbst vermieten oder verwalten lassen?",
-      "beschreibung": "Wie viel Arbeit Kurzzeitvermietung wirklich macht, was eine Verwaltung abnimmt und ab wann sich die Abgabe rechnet.",
+      "titel": "Selbst vermieten oder verwalten lassen?",
+      "beschreibung": "Wie viel Arbeit Kurzzeitvermietung wirklich macht, was eine Verwaltung davon abnimmt und ab wann sich die Abgabe für Sie rechnet.",
       "teaser": "Die Frage wird meistens zu spät gestellt, wenn die Vermietung schon läuft und die Begeisterung in Routine umgeschlagen ist.",
       "datum": "2026-10-05",
       "bild": "bed",
@@ -46,8 +46,8 @@
     },
     {
       "slug": "wohnung-vermieten-worauf-achten",
-      "titel": "Wohnung vermieten: Worauf Sie am Anfang achten müssen",
-      "beschreibung": "Dauermiete, Wohnen auf Zeit oder Ferienwohnung: die Entscheidungen am Anfang, die später teuer zu korrigieren sind.",
+      "titel": "Wohnung vermieten: worauf Sie achten müssen",
+      "beschreibung": "Dauermiete, Wohnen auf Zeit oder Ferienwohnung: die Entscheidungen am Anfang, die sich später nur noch teuer korrigieren lassen.",
       "teaser": "Für alle, die ganz am Anfang stehen. Welche Nutzungsart passt, wer Ihnen die Vermietung untersagen kann, und was anfällt, bevor etwas hereinkommt.",
       "datum": "2026-10-20",
       "bild": "wohnraum",
@@ -55,8 +55,8 @@
     },
     {
       "slug": "kurzzeitvermietung-oder-dauermiete",
-      "titel": "Kurzzeitvermietung oder Dauermiete: Was sich für Sie rechnet",
-      "beschreibung": "Nicht der Nachtpreis entscheidet, sondern Auslastung, Abzüge und Arbeitszeit. Ein Rechenweg für beide Modelle.",
+      "titel": "Kurzzeitvermietung oder Dauermiete?",
+      "beschreibung": "Nicht der Nachtpreis entscheidet, sondern Auslastung, Abzüge und Arbeitszeit. Ein Rechenweg, der beide Modelle vergleichbar macht.",
       "teaser": "90 Euro mal 20 Nächte klingt eindeutig. Was in dieser Rechnung fehlt, und wie Sie beide Modelle mit denselben Annahmen vergleichen.",
       "datum": "2026-10-20",
       "bild": "schlafraum",
@@ -64,7 +64,7 @@
     },
     {
       "slug": "was-kostet-ferienwohnung-verwalten-lassen",
-      "titel": "Was kostet es, eine Ferienwohnung verwalten zu lassen?",
+      "titel": "Ferienwohnung verwalten lassen: die Kosten",
       "beschreibung": "Erfolgsanteil, Mindesthonorar, Bemessungsgrundlage: wie Honorare aufgebaut sind und welche fünf Fragen Angebote vergleichbar machen.",
       "teaser": "Zwei Angebote mit derselben Prozentzahl können sich um mehrere hundert Euro im Monat unterscheiden. Es kommt darauf an, worauf gerechnet wird.",
       "datum": "2026-10-20",
@@ -73,7 +73,7 @@
     },
     {
       "slug": "monteurwohnung-vermieten",
-      "titel": "Monteurwohnung vermieten: Was anders läuft als bei Feriengästen",
+      "titel": "Monteurwohnung vermieten: was anders läuft",
       "beschreibung": "Längere Aufenthalte, weniger Wechsel, Firmenkunden: wie Wohnen auf Zeit funktioniert und welche Ausstattung darüber entscheidet.",
       "teaser": "Zwischen Dauermiete und Ferienwohnung liegt ein Markt, den viele Eigentümer übersehen. Er bringt mehr als die Dauermiete, bei einem Bruchteil der Wechsel.",
       "datum": "2026-10-20",
@@ -82,12 +82,75 @@
     },
     {
       "slug": "ferienwohnung-bayern-pflichten",
-      "titel": "Pflichten für Vermieter in Bayern: Registrierung, Kurbeitrag, Steuern",
-      "beschreibung": "Seit April 2026 können bayerische Gemeinden eine Registrierungspflicht für Kurzzeitvermietung einführen. Was sonst noch gilt und wer verbindlich Auskunft gibt.",
+      "titel": "Vermieterpflichten in Bayern 2026",
+      "beschreibung": "Seit April 2026 können bayerische Gemeinden eine Registrierungspflicht einführen. Was sonst gilt und wer verbindlich Auskunft gibt.",
       "teaser": "Vier Regelwerke greifen gleichzeitig, und eines davon ist neu. Was Sie klären müssen, bevor das Inserat online geht.",
       "datum": "2026-10-20",
       "bild": "chalet",
       "bild_alt": "Ferienhaus in alpiner Umgebung im Herbst"
+    },
+    {
+      "slug": "ferienwohnung-einrichten-ausstattung",
+      "titel": "Ferienwohnung einrichten: was wirklich zählt",
+      "beschreibung": "Nach Priorität sortiert: was über Bewertungen entscheidet, was den Betrieb vereinfacht und was Sie sich getrost sparen können.",
+      "teaser": "Zwischen schön eingerichtet und funktioniert im Betrieb liegt ein Unterschied, den man erst nach zwanzig Aufenthalten bemerkt.",
+      "datum": "2026-10-20",
+      "bild": "sofa",
+      "bild_alt": "Sofa mit Kissen und Decke im Wohnbereich einer Ferienwohnung"
+    },
+    {
+      "slug": "ferienwohnung-fotos-inserat",
+      "titel": "Fotos und Inserat: woran die Buchung hängt",
+      "beschreibung": "Titelbild, Bildreihenfolge, Titel und Beschreibungstext. Was den Klick auslöst und was hinterher in der Bewertung steht.",
+      "teaser": "Zwischen zwei gleichwertigen Wohnungen entscheidet das Inserat. Nicht die Ausstattung, sondern das erste Foto und die ersten zwei Zeilen.",
+      "datum": "2026-10-20",
+      "bild": "living",
+      "bild_alt": "Heller Wohnbereich mit Esstisch, wie er im Inserat gezeigt wird"
+    },
+    {
+      "slug": "dynamische-preise-ferienwohnung",
+      "titel": "Dynamische Preise für Ferienwohnungen",
+      "beschreibung": "Wochentag, Saison, Veranstaltungen, Vorlaufzeit und Mindestaufenthalt. Woran sich der Preis ausrichtet und wo die Methode an Grenzen stößt.",
+      "teaser": "Zwei Preise übers Jahr lassen an beiden Enden Geld liegen. In der Spitze zu billig, in der Flaute zu teuer, dazwischen passiert nichts.",
+      "datum": "2026-10-20",
+      "bild": "alpen",
+      "bild_alt": "Alpine Landschaft im Herbst, Sinnbild für die Saisonabhängigkeit der Nachfrage"
+    },
+    {
+      "slug": "reinigung-ferienwohnung-organisieren",
+      "titel": "Reinigung der Ferienwohnung organisieren",
+      "beschreibung": "Wer putzt, wie wird abgerechnet, was passiert bei Ausfall und wie prüfen Sie die Qualität, ohne selbst vor Ort zu sein? Der Überblick.",
+      "teaser": "Im Businessplan eine Zeile, im Alltag die Hälfte der Probleme. Zeitkritisch, abhängig von einer einzelnen Person.",
+      "datum": "2026-10-20",
+      "bild": "detail",
+      "bild_alt": "Sorgfältig arrangierte Details auf dem Esstisch nach der Reinigung"
+    },
+    {
+      "slug": "ferienwohnung-bewertungen-verbessern",
+      "titel": "Bewertungen verbessern: woran sie hängen",
+      "beschreibung": "Bewertungen entscheiden über Platzierung, Preis und Buchung. Wie gute entstehen und was bei einer schlechten zu tun ist.",
+      "teaser": "Gäste bewerten selten die Wohnung, die sie gesehen haben. Sie bewerten den Abstand zwischen Erwartung und Wirklichkeit.",
+      "datum": "2026-10-20",
+      "bild": "tee",
+      "bild_alt": "Teebox und beschriftetes Gewürzregal als Zeichen sorgfältiger Ausstattung"
+    },
+    {
+      "slug": "ferienwohnung-regensburg-zweckentfremdung",
+      "titel": "Ferienwohnung Regensburg: Zweckentfremdung",
+      "beschreibung": "Welche Fragen Sie in Regensburg klären müssen, wer sie verbindlich beantwortet und welche Alternativen bleiben, wenn es nicht geht.",
+      "teaser": "Welterbe-Altstadt, Universität, angespannter Wohnungsmarkt. Genau diese Mischung macht Kurzzeitvermietung attraktiv und genau beobachtet.",
+      "datum": "2026-10-20",
+      "bild": "table",
+      "bild_alt": "Gedeckter Tisch in einer Stadtwohnung"
+    },
+    {
+      "slug": "ferienwohnung-bayerischer-wald-vermieten",
+      "titel": "Ferienwohnung im Bayerischen Wald vermieten",
+      "beschreibung": "Mehrere Reiseanlässe über das Jahr: Nationalpark, Wintersport, Thermen, Pullman City. Wie sich daraus eine tragfähige Saison bauen lässt.",
+      "teaser": "Die Saison ist hier formbarer als an Orten mit nur einem Anlass. Wer auf einen setzt, steht in der Zwischensaison leer.",
+      "datum": "2026-10-20",
+      "bild": "chalet",
+      "bild_alt": "Ferienhaus in waldreicher Mittelgebirgslandschaft"
     }
   ]
 }
